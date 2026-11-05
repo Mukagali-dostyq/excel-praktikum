@@ -91,6 +91,12 @@ input{font:inherit}
 #copyBox{border:2px dashed var(--g);animation:ants 0.6s linear infinite;margin:-1px 0 0 -1px}
 @keyframes ants{50%{border-color:#7fbf98}}
 #fillBox{border:2px dashed #777;margin:-1px 0 0 -1px}
+#tmenu{position:absolute;z-index:6;display:flex;flex-wrap:wrap;gap:4px;max-width:min(330px,88vw);background:#fff;border:1px solid #cfd8d2;border-radius:10px;box-shadow:0 6px 22px rgba(0,0,0,.18);padding:5px}
+#tmenu button{font:inherit;font-size:14px;border:0;background:#f2f6f3;border-radius:7px;padding:9px 11px;cursor:pointer;color:#163d27;white-space:nowrap}
+#tmenu button.main{background:var(--g);color:#fff;font-weight:600}
+#tmenu button:active{filter:brightness(.92)}
+#fillPickBar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:60;background:#163d27;color:#fff;border-radius:22px;padding:10px 16px;font-size:15px;box-shadow:0 6px 22px rgba(0,0,0,.25);display:flex;gap:10px;align-items:center;max-width:92vw}
+#fillPickBar button{font:inherit;border:0;border-radius:14px;padding:5px 12px;background:#fff;color:#163d27;cursor:pointer}
 .refbox{position:absolute;pointer-events:none;z-index:2;border:2px solid;margin:-1px 0 0 -1px}
 #fillHandle{position:absolute;width:9px;height:9px;background:var(--g);border:1.5px solid #fff;z-index:3;cursor:crosshair;touch-action:none}
 @media (pointer:coarse){#fillHandle{width:18px;height:18px;border-radius:50%;margin:-5px 0 0 -5px}}
@@ -1506,13 +1512,16 @@ $('grid').addEventListener('pointerdown', e => {
   if (ed && pointable()){ e.preventDefault(); pointStart(r, c); drag = {kind:'point', r0:r, c0:c}; return; }
   if (ed){ if (!commitEdit()){ e.preventDefault(); return; } }
   const touch = e.pointerType === 'touch' || e.pointerType === 'pen';
+  hideTMenu();
+  if (fillPick){ e.preventDefault(); finishFillPick(r, c); return; }
   useSink = !touch;
   const ae = document.activeElement; if (touch && ae && ae !== document.body && ae.blur) ae.blur();
   if (!touch) setTimeout(focusSink, 0);
   if (e.shiftKey || (rangeMode && rangeAnchorSet)){ sel.fr = r; sel.fc = c; }
   else {
-    if (touch && !rangeMode && sel.ar === r && sel.ac === c && sel.fr === r && sel.fc === c){ startEdit('edit', getRaw(A(c, r))); return; }
+    if (touch && !rangeMode && sel.ar === r && sel.ac === c && sel.fr === r && sel.fc === c){ touchTapSame(r, c); return; }
     sel = {ar:r, ac:c, fr:r, fc:c}; if (rangeMode) rangeAnchorSet = true;
+    if (touch){ lastTap = {r, c, t:Date.now()}; clearTimeout(tmenuT); }
   }
   drawSel();
   if (!touch){ drag = {kind:'sel'}; e.preventDefault(); }
@@ -1536,6 +1545,59 @@ document.addEventListener('pointerup', () => {
 });
 $('fillHandle').addEventListener('pointerdown', e => { if (!canEdit() || ed) return; e.preventDefault(); e.stopPropagation(); try { e.target.releasePointerCapture(e.pointerId); } catch (x){} drag = {kind:'fill', src:rng(), dst:null}; });
 $('fillHandle').addEventListener('dblclick', e => { e.preventDefault(); if (canEdit()) fillDouble(); });
+
+/* ---------- сенсорные устройства: меню по тапу (как в Google Таблицах) ----------
+   1-й тап — выделить ячейку; тап по уже выделенной — меню операций; двойной тап — редактировать. */
+let lastTap = null, tmenuT = 0, fillPick = null;
+const TL = (ru, kz) => S.lang === 'kz' ? kz : ru;
+function touchTapSame(r, c){
+  const now = Date.now();
+  if (lastTap && lastTap.r === r && lastTap.c === c && now - lastTap.t < 400){ clearTimeout(tmenuT); lastTap = null; startEdit('edit', getRaw(A(c, r))); return; }
+  lastTap = {r, c, t:now}; clearTimeout(tmenuT);
+  tmenuT = setTimeout(() => showTMenu(r, c), 320);
+}
+function hideTMenu(){ clearTimeout(tmenuT); const m = $('tmenu'); if (m) m.remove(); }
+function showTMenu(r, c){
+  hideTMenu(); if (!canEdit() || ed) return;
+  const m = document.createElement('div'); m.id = 'tmenu';
+  const items = [
+    ['edit', '✏ ' + TL('Изменить', 'Өзгерту'), 'main'],
+    ['autofill', '⤓ ' + TL('Автозаполнение', 'Автотолтыру'), 'main'],
+    ['range', '▦ ' + TL('Выделить диапазон', 'Ауқым белгілеу')],
+    ['copy', '⧉ ' + TL('Копировать', 'Көшіру')],
+    ['paste', '📋 ' + TL('Вставить', 'Қою')],
+    ['clear', '✕ ' + TL('Очистить', 'Тазалау')]
+  ];
+  m.innerHTML = items.map(([a, l, cls]) => `<button type="button" data-a="${a}" class="${cls || ''}">${l}</button>`).join('');
+  $('gridInner').appendChild(m);
+  const b = boxRect(r, c, r, c), gw = $('gridWrap'), x0 = gw.scrollLeft + 2, x1 = gw.scrollLeft + gw.clientWidth - m.offsetWidth - 4;
+  m.style.left = Math.max(x0, Math.min(b.l, x1)) + 'px'; m.style.top = (b.t + b.h + 6) + 'px';
+  m.addEventListener('pointerdown', e => e.stopPropagation());
+  m.addEventListener('click', e => {
+    const bt = e.target.closest('button'); if (!bt) return; const a = bt.dataset.a; hideTMenu(); if (!canEdit()) return;
+    if (a === 'edit') startEdit('edit', getRaw(activeAddr()));
+    else if (a === 'autofill') startFillPick();
+    else if (a === 'range'){ rangeMode = true; rangeAnchorSet = true; $('btnRange').classList.add('on'); toast(TL('Нажмите на последнюю клетку диапазона', 'Ауқымның соңғы ұяшығын басыңыз')); }
+    else if (a === 'copy'){ copySel(); toast(TL('Скопировано', 'Көшірілді')); }
+    else if (a === 'paste') pasteClip();
+    else if (a === 'clear') clearSel();
+  });
+}
+function startFillPick(){
+  fillPick = {src: rng()};
+  const bar = document.createElement('div'); bar.id = 'fillPickBar';
+  bar.innerHTML = `<span>${TL('Нажмите на клетку, ДО которой протянуть формулу', 'Формуланы қай ұяшыққа ДЕЙІН созу керек — соны басыңыз')}</span><button type="button">${TL('Отмена', 'Болдырмау')}</button>`;
+  bar.querySelector('button').onclick = cancelFillPick; document.body.appendChild(bar);
+}
+function cancelFillPick(){ fillPick = null; const b = $('fillPickBar'); if (b) b.remove(); }
+function finishFillPick(r, c){
+  const s = fillPick.src; cancelFillPick(); if (!canEdit()) return;
+  const d = {...s}; const dn = r - s.r2, up = s.r1 - r, rt = c - s.c2, lf = s.c1 - c, mv = Math.max(dn, up, rt, lf);
+  if (mv <= 0) return;
+  if (mv === dn) d.r2 = r; else if (mv === up) d.r1 = r; else if (mv === rt) d.c2 = c; else d.c1 = c;
+  doFill(s, d); sel = {ar:d.r1, ac:d.c1, fr:d.r2, fc:d.c2}; drawSel();
+}
+$('gridWrap').addEventListener('scroll', () => hideTMenu(), {passive:true});
 
 /* ---------- inputs ---------- */
 $('cellEd').addEventListener('input', () => { syncFrom($('cellEd')); afterInput(); });
@@ -1831,8 +1893,11 @@ function openFuncs(){
 let grace = 0;
 const fsSupported = () => { const el = document.documentElement; return !!(el.requestFullscreen || el.webkitRequestFullscreen) && document.fullscreenEnabled !== false; };
 const inFS = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+/* планшет/телефон: экранная клавиатура выбивает из полноэкранного режима и даёт blur — это не нарушение.
+   Там полноэкранный режим не включаем; нарушение — только уход со страницы (другая вкладка/приложение). */
+const TOUCH_DEV = (() => { try { return matchMedia('(pointer:coarse)').matches || (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent)); } catch (e){ return false; } })();
 function enterFS(){
-  grace = Date.now() + 1500; if (!CONFIG.ANTI_CHEAT) return;
+  grace = Date.now() + 1500; if (!CONFIG.ANTI_CHEAT || TOUCH_DEV) return;
   const el = document.documentElement, fn = el.requestFullscreen || el.webkitRequestFullscreen;
   if (fn){ try { const p = fn.call(el); if (p && p.catch) p.catch(() => {}); } catch (e){} }
 }
@@ -1844,10 +1909,10 @@ function violation(type){
   S.violations.push({type, t:Date.now(), task:S.cur}); S.locked = true; S.lockReason = type;
   cancelEdit(); drag = null; save(); showLock(); updViol();
 }
-const onFSChange = () => { if (!inFS() && fsSupported()) violation('fs'); };
+const onFSChange = () => { if (!TOUCH_DEV && !inFS() && fsSupported()) violation('fs'); };
 document.addEventListener('fullscreenchange', onFSChange);
 document.addEventListener('webkitfullscreenchange', onFSChange);
-window.addEventListener('blur', () => violation('blur'));
+window.addEventListener('blur', () => { if (!TOUCH_DEV) violation('blur'); });
 document.addEventListener('visibilitychange', () => { if (document.hidden) violation('hidden'); });
 document.addEventListener('contextmenu', e => { if (S.started && !S.finished) e.preventDefault(); });
 function showLock(){
@@ -1878,7 +1943,7 @@ function applyI18n(){
   document.querySelectorAll('#tools button').forEach(b => { const s = b.querySelector('span'); if (s) b.title = s.textContent; });
   document.querySelectorAll('[data-lang]').forEach(b => b.classList.toggle('on', b.dataset.lang === S.lang));
   $('rules').innerHTML = t('rules').map(r => `<li>${r}</li>`).join('');
-  $('fsWarn').textContent = (CONFIG.ANTI_CHEAT && !fsSupported()) ? t('fsWarn') : '';
+  $('fsWarn').textContent = (CONFIG.ANTI_CHEAT && !fsSupported() && !TOUCH_DEV) ? t('fsWarn') : '';
   $('btnFuncs').hidden = !CONFIG.SHOW_FUNCTION_HELP;
 }
 function setLang(l){
