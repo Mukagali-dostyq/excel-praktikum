@@ -313,7 +313,7 @@ const CONFIG = {
   MAX_FREE_RESUMES: 2,      // сколько раз ученик может сам вернуться после нарушения
   ANTI_CHEAT: true,         // полноэкранный режим + контроль переключений
   TIME_LIMIT_MIN: 0,        // ограничение времени в минутах (0 — без ограничения)
-  TRIALS: 3,                // сколько наборов случайных данных при проверке формул
+  TRIALS: 12,               // сколько наборов случайных данных при проверке формул (одни и те же при каждом нажатии)
   SHOW_FUNCTION_HELP: true  // кнопка «Функции» со справочником
 };
 const LS_KEY = 'excel-practicum-3-v1';
@@ -586,8 +586,11 @@ TASKS.push({
     {cells:'L4', p:1.5, want:[CIF], dep:'G2:G13', alt:(V,r,cl,G)=>R.filter(k=>isYes(G('G'+k))).length, name:L('допуск','рұқсат алғандар'), expect:V=>R.filter(k=>adm(V,k)).length},
     {cells:'L5', p:1.5, want:[CIF], dep:'H2:H13', alt:(V,r,cl,G)=>R.filter(k=>isYes(G('H'+k))).length, name:L('грант','грант алғандар'), expect:(V,r,cl,G)=>R.filter(k=>grant(V,k,G,sum(V,k))).length}
   ],
-  perturb(set){ const y = tr(YES), n = tr(NO);
-    for (const r of R){ ['B','C','D'].forEach(c => set(c+r, RND.int(15,40))); set('E'+r, Math.random() < .3 ? y : n); } },
+  // пороги не как в исходных (ловит число вместо $L$2/$L$3) + ученики ровно на границах
+  perturb(set){ const y = tr(YES), n = tr(NO), l2 = RND.pick([20,30]), l3 = RND.pick([90,110]);
+    set('L2', l2); set('L3', l3);
+    for (const r of R){ ['B','C','D'].forEach(c => set(c+r, RND.int(15,40))); set('E'+r, Math.random() < .3 ? y : n); }
+    set('B2', l2); set('C2', 35); set('B3', 38); set('C3', l2); set('B4', 30); set('C4', 30); set('D4', l3 - 60); set('E4', n); },
   sol:[['F2:F13','=СУММ(B2:D2)'],['G2:G13','=ЕСЛИ(И(B2>=$L$2;C2>=$L$2);"да";"нет")'],['H2:H13','=ЕСЛИ(ИЛИ(F2>=$L$3;E2="да");"да";"нет")'],['L4','=СЧЁТЕСЛИ(G2:G13;"да")'],['L5','=СЧЁТЕСЛИ(H2:H13;"да")']]
 });
 }
@@ -1116,7 +1119,10 @@ function runChecks(si){
   const tk = TASKS[si], st = S.sheets[si];
   const base = makeCtx(si, null);
   const trials = [];
-  for (let k = 0; k < CONFIG.TRIALS; k++){ const ov = {}; tk.perturb((a, v) => { ov[a] = v; }); trials.push(makeCtx(si, ov)); }
+  // случайные данные — с фиксированным seed: при каждом нажатии «Проверить» один и тот же вердикт
+  const rand0 = Math.random; let sd = (si + 1) * 2654435761 >>> 0;
+  Math.random = () => { sd = (sd + 0x6D2B79F5) >>> 0; let t = sd; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  try { for (let k = 0; k < CONFIG.TRIALS; k++){ const ov = {}; tk.perturb((a, v) => { ov[a] = v; }); trials.push(makeCtx(si, ov)); } } finally { Math.random = rand0; }
   const items = tk.checks.map(ch => {
     const list = addrs(ch.cells); const empty = [], nof = [];
     list.forEach(a => { const raw = st.cells[a]; if (raw === undefined || raw === '') empty.push(a); else if (raw[0] !== '=' || raw.length < 2) nof.push(a); });
