@@ -1,0 +1,1986 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Excel Практикум · 10 класс</title>
+<style>
+:root{--g:#217346;--g2:#185c37;--gl:#e9f3ec;--grid:#e1e1e1;--hd:#f3f3f3;--hs:#d3e7da;--txt:#1f1f1f;--muted:#666;--bad:#d93025;--ok:#1e8e3e;--warn:#e37400}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;font-family:Calibri,"Segoe UI",Roboto,Arial,sans-serif;color:var(--txt);background:#fff}
+body{overflow:hidden}
+[hidden]{display:none!important}
+button{font:inherit;cursor:pointer}
+input{font:inherit}
+.btn{border:1px solid #c8c8c8;background:#fff;border-radius:6px;padding:6px 14px;color:var(--txt)}
+.btn:hover{background:#f2f2f2}
+.btn.primary{background:var(--g);border-color:var(--g);color:#fff}
+.btn.primary:hover{background:var(--g2)}
+.btn.big{padding:11px 22px;font-size:16px;font-weight:600}
+.btn.light{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.35);color:#fff;padding:4px 12px}
+.btn.light:hover{background:rgba(255,255,255,.26)}
+.xl{display:inline-grid;place-items:center;width:46px;height:46px;border-radius:9px;background:var(--g);color:#fff;font:700 26px/1 "Segoe UI",Arial,sans-serif;box-shadow:inset -10px 0 0 rgba(0,0,0,.12)}
+.xl.sm{width:26px;height:26px;font-size:15px;border-radius:5px;background:#fff;color:var(--g);box-shadow:none}
+.langs{display:inline-flex;border:1px solid rgba(0,0,0,.15);border-radius:6px;overflow:hidden}
+.langs button{border:0;background:transparent;padding:4px 10px;font-weight:600;color:inherit;opacity:.65}
+.langs button.on{background:rgba(0,0,0,.08);opacity:1}
+.top .langs{border-color:rgba(255,255,255,.35)}
+.top .langs button.on{background:rgba(255,255,255,.22)}
+
+/* start */
+.screen{position:fixed;inset:0}
+#start,#result{background:linear-gradient(135deg,#123f27,#217346 55%,#33a36a);overflow:auto;display:flex;align-items:flex-start;justify-content:center;padding:28px 16px}
+.card{background:#fff;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.28);padding:26px 28px;width:100%;max-width:560px;margin:auto}
+.start-head{display:flex;gap:14px;align-items:center;margin-bottom:18px}
+.start-head h1{margin:0;font-size:26px}
+.start-head p{margin:2px 0 0;color:var(--muted)}
+.start-top{display:flex;justify-content:flex-end;margin-bottom:6px}
+.field{display:block;margin:10px 0}
+.field span{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+.field input{width:100%;padding:10px 12px;border:1px solid #c8c8c8;border-radius:8px;font-size:16px}
+.field input:focus{outline:2px solid var(--g);border-color:transparent}
+.rules{margin:16px 0;padding:12px 14px 12px 32px;background:var(--gl);border-radius:10px;font-size:14px;line-height:1.45}
+.rules li{margin:4px 0}
+.err-msg{color:var(--bad);min-height:20px;font-size:14px}
+.tiny{font-size:12px;color:var(--muted);margin:12px 0 0}
+.linkbtn{border:0;background:none;color:var(--g);text-decoration:underline;padding:0;font-size:12px}
+
+/* work */
+#work{display:flex;flex-direction:column;height:100vh;height:100dvh}
+.top{display:flex;align-items:center;gap:10px;background:var(--g);color:#fff;padding:6px 12px;min-height:44px;flex-wrap:nowrap}
+.brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:16px;white-space:nowrap}
+.who{opacity:.9;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.spacer{flex:1}
+.pill{background:rgba(255,255,255,.16);border-radius:20px;padding:3px 10px;font-variant-numeric:tabular-nums;font-size:14px;white-space:nowrap}
+.pill.warn{background:#fbbc04;color:#3c2a00;font-weight:700}
+.tools{display:flex;gap:2px;align-items:stretch;background:#f8f8f8;border-bottom:1px solid #ddd;padding:4px 8px;overflow-x:auto;scrollbar-width:thin}
+.tools button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border:1px solid transparent;background:transparent;border-radius:5px;padding:3px 8px;min-width:58px;font-size:11.5px;color:#333;white-space:nowrap}
+.tools button b{font-size:17px;line-height:18px;font-weight:600;color:var(--g)}
+.tools button:hover{background:#e9e9e9}
+.tools button.on{background:var(--hs);border-color:#9cc9ad}
+.tools .sep{width:1px;background:#ddd;margin:3px 4px}
+.fbar{display:flex;align-items:center;border-bottom:1px solid #d4d4d4;height:32px;background:#fff}
+#nameBox{width:86px;height:100%;border:0;border-right:1px solid #d4d4d4;padding:0 8px;font-size:13px;text-align:center}
+.fxbtns{display:flex;align-items:center;border-right:1px solid #d4d4d4;height:100%;padding:0 4px}
+.fxbtns button{border:0;background:none;width:26px;height:26px;color:#777;font-size:14px;border-radius:4px}
+.fxbtns button:hover{background:#eee}
+.fxbtns #fxFn{font-style:italic;font-family:Georgia,serif;font-weight:700;color:#555}
+#fx{flex:1;height:100%;border:0;padding:0 8px;font-size:14px;font-family:Consolas,"Cascadia Mono",monospace;min-width:0}
+#fx:focus,#nameBox:focus{outline:none;background:#fbfffc}
+.main{flex:1;display:flex;min-height:0}
+#gridWrap{flex:1;overflow:auto;position:relative;background:#fff;outline:none;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+#gridInner{position:relative;display:inline-block;min-width:100%}
+#grid{border-collapse:separate;border-spacing:0;table-layout:fixed;font-size:13.5px}
+#grid th,#grid td{border-right:1px solid var(--grid);border-bottom:1px solid var(--grid);height:24px;padding:0 5px;white-space:nowrap;overflow:hidden;cursor:cell}
+#grid thead th{position:sticky;top:0;background:var(--hd);z-index:4;font-weight:400;color:#555;text-align:center;font-size:12.5px;border-color:#d6d6d6}
+#grid tbody th{position:sticky;left:0;background:var(--hd);z-index:3;font-weight:400;color:#555;text-align:center;font-size:12.5px;border-color:#d6d6d6}
+#grid thead th.corner{left:0;z-index:5}
+#grid th.hs{background:var(--hs);color:var(--g2);font-weight:700;box-shadow:inset 0 -2px 0 var(--g)}
+#grid tbody th.hs{box-shadow:inset -2px 0 0 var(--g)}
+#grid td.num{text-align:right}
+#grid td.c{text-align:center}
+#grid td.err{text-align:center;color:#c5221f;font-weight:600}
+#grid td.h{background:#e3efe7;font-weight:700;white-space:normal;line-height:1.15;text-align:center;padding:3px 4px;color:#163d27}
+#grid td.lbl{background:#fafafa;white-space:normal;line-height:1.15;padding:2px 5px}
+#grid td.p{background:#e8f1fb;font-weight:700}
+#grid td.t{background:#fff9e0}
+#grid td.insel{background-image:linear-gradient(rgba(33,115,70,.14),rgba(33,115,70,.14))}
+#grid td.bad{box-shadow:inset 0 0 0 2px rgba(217,48,37,.6)}
+.ov{position:absolute;pointer-events:none;z-index:2}
+#selBox{border:2px solid var(--g);margin:-1px 0 0 -1px}
+#copyBox{border:2px dashed var(--g);animation:ants 0.6s linear infinite;margin:-1px 0 0 -1px}
+@keyframes ants{50%{border-color:#7fbf98}}
+#fillBox{border:2px dashed #777;margin:-1px 0 0 -1px}
+.refbox{position:absolute;pointer-events:none;z-index:2;border:2px solid;margin:-1px 0 0 -1px}
+#fillHandle{position:absolute;width:9px;height:9px;background:var(--g);border:1.5px solid #fff;z-index:3;cursor:crosshair;touch-action:none}
+@media (pointer:coarse){#fillHandle{width:18px;height:18px;border-radius:50%;margin:-5px 0 0 -5px}}
+#cellEd{position:absolute;z-index:6;border:2px solid var(--g);margin:-1px 0 0 -1px;padding:0 4px;font-size:13.5px;outline:none;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+#panel{width:350px;flex:none;border-left:1px solid #d4d4d4;overflow:auto;background:#fcfcfc;padding:14px 16px 24px;font-size:14.5px;line-height:1.45}
+#panel.closed{display:none}
+.pnum{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--g);font-weight:700}
+#panel h2{margin:2px 0 8px;font-size:20px;line-height:1.2}
+.ptext p{margin:6px 0}
+.ptext ol{padding-left:22px;margin:8px 0}
+.ptext li{margin:7px 0}
+.ptext code,.res code{font-family:Consolas,monospace;font-size:13px;background:#e3efe7;color:#174a2c;padding:0 4px;border-radius:4px;white-space:nowrap}
+.ptext .note{background:#fff4e0;border-left:3px solid var(--warn);padding:6px 10px;border-radius:4px;font-size:13.5px}
+.checkbar{display:flex;gap:8px;align-items:center;margin:14px 0 6px;flex-wrap:wrap}
+.score{font-size:15px}
+.score b{font-size:18px;color:var(--g)}
+.res{list-style:none;padding:0;margin:8px 0}
+.res li{display:flex;gap:8px;padding:6px 8px;border-radius:6px;margin:3px 0;font-size:13.5px;line-height:1.35;background:#f3f3f3}
+.res li.ok{background:#e6f4ea}
+.res li.wrong,.res li.noformula,.res li.samefail{background:#fce8e6}
+.res li.fragile{background:#fef7e0}
+.res li.partial{background:#fff4d6}
+.res li.partial .ic{color:#b06000}
+.res .rt{flex:1}
+.res .pt{flex:none;font-weight:700;font-variant-numeric:tabular-nums;color:#444;white-space:nowrap}
+.rub{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0}
+.rub td{border-bottom:1px solid #eee;padding:3px 6px;vertical-align:top}
+.rub td.n{text-align:right}
+.res .ic{font-weight:700;width:16px;flex:none;text-align:center}
+.res li.ok .ic{color:var(--ok)} .res li.wrong .ic,.res li.noformula .ic,.res li.samefail .ic{color:var(--bad)} .res li.fragile .ic{color:var(--warn)} .res li.empty .ic{color:#999}
+.res small{color:#666}
+.about{font-size:12.5px;color:var(--muted);border-top:1px solid #e5e5e5;padding-top:8px;margin-top:14px}
+#tabs{display:flex;align-items:stretch;background:#f0f0f0;border-top:1px solid #d4d4d4;height:34px;overflow-x:auto;padding:0 8px;scrollbar-width:thin;flex:none}
+.tab{border:0;border-right:1px solid #d9d9d9;background:transparent;padding:0 14px;font-size:13.5px;color:#333;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.tab:hover{background:#e6e6e6}
+.tab.on{background:#fff;color:var(--g);font-weight:700;box-shadow:inset 0 -3px 0 var(--g)}
+.tab i{font-style:normal;font-size:11px;background:#ddd;border-radius:9px;padding:0 6px;color:#444;font-weight:600}
+.tab i.ok{background:var(--ok);color:#fff}
+.status{display:flex;align-items:center;gap:16px;background:#f3f3f3;border-top:1px solid #ddd;height:24px;padding:0 12px;font-size:12.5px;color:#444;flex:none}
+#stats span{margin-left:14px}
+
+/* overlays */
+.overlay{position:fixed;inset:0;background:rgba(15,30,20,.72);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px;backdrop-filter:blur(3px)}
+.lockcard{text-align:center;max-width:460px}
+.lock-ic{font-size:44px;line-height:1}
+.lockcard h2{margin:8px 0}
+.lockcard input{padding:10px;border:1px solid #c8c8c8;border-radius:8px;font-size:18px;text-align:center;width:200px;letter-spacing:.2em;margin:6px 0}
+#modal .card{max-width:640px;max-height:86vh;display:flex;flex-direction:column}
+#mBody{overflow:auto;margin:10px 0;font-size:14.5px;line-height:1.45}
+#mFoot{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+#mTitle{margin:0;font-size:20px}
+.fnlist{list-style:none;padding:0;margin:8px 0}
+.fnlist li{padding:7px 8px;border-bottom:1px solid #eee;cursor:pointer;border-radius:5px}
+.fnlist li:hover{background:var(--gl)}
+.fnlist b{color:var(--g)}
+.fnlist code{font-family:Consolas,monospace;font-size:13px;color:#333}
+.fnlist small{color:#888}
+.fnlist li{cursor:default}
+.fnlist li.star{background:#f3fbf6}
+.fnlist li.open{background:#fff;box-shadow:inset 3px 0 0 var(--g)}
+.fnhead{cursor:pointer}
+.fnstar{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--g);border-radius:9px;padding:1px 7px;margin-right:6px;vertical-align:1px}
+.fnbtns{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.fnbtns button{font:inherit;font-size:12.5px;border:1px solid #cfd8d2;background:#fff;border-radius:6px;padding:3px 9px;cursor:pointer}
+.fnbtns .fnmore{color:var(--g);font-weight:600}
+.fnbtns button:hover{background:var(--gl)}
+.fndet{margin:8px 0 2px;padding:9px 11px;background:#fbfcfb;border:1px solid #e3e9e5;border-radius:7px;font-size:13.5px;line-height:1.5}
+.fndet p{margin:4px 0}
+.fndet .fnh{font-weight:700;color:#2b5d3f;margin-top:8px}
+.fndet .fnbad{color:#b3261e}
+.fndet ul.fnargs{margin:4px 0;padding-left:18px}
+.fndet ul.fnargs li{border:0;padding:2px 0;cursor:default}
+.fndet ul.fnargs li:hover{background:none}
+.fnex{margin:3px 0}
+.fndet code{background:#eef4f0;border-radius:4px;padding:0 4px}
+.fnsearch{width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:7px}
+.sol{font-family:Consolas,monospace;font-size:13px;background:#f6f6f6;border-radius:6px;padding:8px;margin:4px 0 12px;white-space:pre-wrap;word-break:break-all}
+#sink{position:fixed;left:-60px;top:0;width:2px;height:2px;opacity:0;border:0;padding:0}
+#toast{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);background:#323232;color:#fff;padding:10px 18px;border-radius:8px;z-index:60;font-size:15px;box-shadow:0 6px 20px rgba(0,0,0,.3);max-width:90vw;text-align:center}
+#toast.ok{background:var(--ok)} #toast.bad{background:var(--bad)}
+
+/* results */
+.rescard{max-width:720px}
+.res-head{display:flex;gap:14px;align-items:center}
+.res-head h1{margin:0;font-size:24px}
+.res-head p{margin:2px 0 0;color:var(--muted)}
+.grade{margin-left:auto;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:32px;font-weight:800;color:#fff;background:var(--g);flex:none}
+.grade.g4{background:#1a73e8}.grade.g3{background:var(--warn)}.grade.g2{background:var(--bad)}
+.res-meta{display:flex;flex-wrap:wrap;gap:8px 20px;margin:14px 0;font-size:14px;color:#444}
+.restab{width:100%;border-collapse:collapse;font-size:14.5px}
+.restab th,.restab td{padding:7px 8px;border-bottom:1px solid #eee;text-align:left}
+.restab td.n{text-align:right;font-variant-numeric:tabular-nums}
+.restab tr.tot td{font-weight:700;border-top:2px solid #333}
+.bar{height:6px;background:#eee;border-radius:3px;overflow:hidden;min-width:60px}
+.bar i{display:block;height:100%;background:var(--g)}
+.viol{margin:14px 0;padding:10px 12px;background:#fff4e0;border-radius:8px;font-size:13.5px}
+.viol.none{background:#e6f4ea}
+.res-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+
+@media (max-width:900px){
+  .main{flex-direction:column}
+  #panel{width:auto;max-height:42%;border-left:0;border-top:2px solid var(--g);order:2}
+  .who{display:none}
+}
+@media (max-width:640px){
+  .brand span:last-child{display:none}
+  .tools button{min-width:44px;font-size:0}
+  .tools button b{font-size:18px}
+  #nameBox{width:60px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== START ===================== -->
+<section id="start" class="screen">
+  <div class="card">
+    <div class="start-top"><div class="langs"><button data-lang="ru">RU</button><button data-lang="kz">ҚАЗ</button></div></div>
+    <div class="start-head"><span class="xl">X</span><div><h1 data-i="appTitle"></h1><p data-i="appSub"></p></div></div>
+    <label class="field"><span data-i="lblName"></span><input id="stName" autocomplete="off" maxlength="60"></label>
+    <label class="field"><span data-i="lblClass"></span><input id="stClass" autocomplete="off" maxlength="12" placeholder="11 А"></label>
+    <ul class="rules" id="rules"></ul>
+    <div id="startErr" class="err-msg"></div>
+    <button id="btnStart" class="btn primary big" data-i="start"></button>
+    <p class="tiny"><span data-i="offlineNote"></span> <span id="fsWarn"></span></p>
+    <p class="tiny"><button class="linkbtn" id="btnTeacher" data-i="teacher"></button></p>
+  </div>
+</section>
+
+<!-- ===================== WORK ===================== -->
+<section id="work" class="screen" hidden>
+  <header class="top">
+    <div class="brand"><span class="xl sm">X</span><span data-i="appTitle"></span></div>
+    <div class="who" id="who"></div>
+    <div class="spacer"></div>
+    <div class="pill" id="timer">0:00</div>
+    <div class="pill warn" id="viol" hidden></div>
+    <div class="langs"><button data-lang="ru">RU</button><button data-lang="kz">ҚАЗ</button></div>
+    <button class="btn light" id="btnPanel" data-i="taskBtn"></button>
+    <button class="btn light" id="btnFinish" data-i="finish"></button>
+  </header>
+  <div class="tools" id="tools">
+    <button data-act="undo"><b>↶</b><span data-i="undo"></span></button>
+    <button data-act="redo"><b>↷</b><span data-i="redo"></span></button>
+    <div class="sep"></div>
+    <button data-act="copy"><b>⧉</b><span data-i="copy"></span></button>
+    <button data-act="paste"><b>⎘</b><span data-i="paste"></span></button>
+    <button data-act="clear"><b>⌫</b><span data-i="clear"></span></button>
+    <div class="sep"></div>
+    <button data-act="fillDown"><b>⇩</b><span data-i="fillDown"></span></button>
+    <button data-act="fillRight"><b>⇨</b><span data-i="fillRight"></span></button>
+    <button data-act="abs"><b>$</b><span data-i="abs"></span></button>
+    <button data-act="range" id="btnRange"><b>⬚</b><span data-i="range"></span></button>
+    <div class="sep"></div>
+    <button data-act="funcs" id="btnFuncs"><b>ƒx</b><span data-i="funcs"></span></button>
+  </div>
+  <div class="fbar">
+    <input id="nameBox" spellcheck="false" autocomplete="off">
+    <div class="fxbtns"><button id="fxCancel" title="Esc">✕</button><button id="fxOk" title="Enter">✓</button><button id="fxFn">fx</button></div>
+    <input id="fx" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off">
+  </div>
+  <div class="main">
+    <div id="gridWrap" tabindex="-1">
+      <div id="gridInner">
+        <table id="grid"></table>
+        <div id="refBoxes"></div>
+        <div id="copyBox" class="ov" hidden></div>
+        <div id="selBox" class="ov"></div>
+        <div id="fillBox" class="ov" hidden></div>
+        <div id="fillHandle"></div>
+        <input id="cellEd" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off" hidden>
+      </div>
+    </div>
+    <aside id="panel"></aside>
+  </div>
+  <nav id="tabs"></nav>
+  <footer class="status"><span id="mode"></span><span class="spacer"></span><span id="stats"></span></footer>
+</section>
+
+<!-- ===================== RESULT ===================== -->
+<section id="result" class="screen" hidden></section>
+
+<!-- ===================== LOCK ===================== -->
+<div id="lock" class="overlay" hidden>
+  <div class="card lockcard">
+    <div class="lock-ic">⏸</div>
+    <h2 id="lkTitle"></h2>
+    <p id="lkReason"></p>
+    <p id="lkCount" style="font-weight:700"></p>
+    <div id="lkPinWrap" hidden>
+      <p id="lkPinMsg"></p>
+      <input id="lkPin" type="password" inputmode="numeric" autocomplete="off"><div id="lkPinErr" class="err-msg"></div>
+    </div>
+    <button id="lkBtn" class="btn primary big"></button>
+  </div>
+</div>
+
+<!-- ===================== MODAL ===================== -->
+<div id="modal" class="overlay" hidden>
+  <div class="card"><h2 id="mTitle"></h2><div id="mBody"></div><div id="mFoot"></div></div>
+</div>
+<div id="toast" hidden></div>
+<input id="sink" aria-hidden="true" tabindex="-1" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+
+<script>
+(function(){
+'use strict';
+
+/* ====================================================================
+   НАСТРОЙКИ ДЛЯ УЧИТЕЛЯ / МҰҒАЛІМГЕ АРНАЛҒАН БАПТАУЛАР
+   ==================================================================== */
+const CONFIG = {
+  TEACHER_PIN: '2577',      // PIN-код учителя (разблокировка, сброс, ответы)
+  MAX_FREE_RESUMES: 2,      // сколько раз ученик может сам вернуться после нарушения
+  ANTI_CHEAT: true,         // полноэкранный режим + контроль переключений
+  TIME_LIMIT_MIN: 0,        // ограничение времени в минутах (0 — без ограничения)
+  TRIALS: 3,                // сколько наборов случайных данных при проверке формул
+  SHOW_FUNCTION_HELP: true  // кнопка «Функции» со справочником
+};
+const LS_KEY = 'excel-practicum-10-v1';
+
+/* ==================== helpers ==================== */
+const $ = id => document.getElementById(id);
+const L = (ru, kz) => ({ru, kz});
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+function rnd(x, d){ d = d|0; const m = Math.pow(10, d); const v = Math.round(Number((Math.abs(x)*m).toPrecision(15)))/m; return Number((x < 0 ? -v : v).toPrecision(15)); }
+function rndUp(x, d){ const m = Math.pow(10, d|0); const v = Math.ceil(Number((Math.abs(x)*m).toPrecision(15)))/m; return Number((x < 0 ? -v : v).toPrecision(15)); }
+function rndDown(x, d){ const m = Math.pow(10, d|0); const v = Math.floor(Number((Math.abs(x)*m).toPrecision(15)))/m; return Number((x < 0 ? -v : v).toPrecision(15)); }
+const range = (a, b) => { const o = []; for (let i = a; i <= b; i++) o.push(i); return o; };
+const sumA = a => a.reduce((s, x) => s + x, 0);
+const avgA = a => sumA(a) / a.length;
+const col = (V, c, r1, r2) => range(r1, r2).map(r => V(c + r));
+const RND = {
+  int: (a, b) => a + Math.floor(Math.random()*(b - a + 1)),
+  dec: (a, b, d) => rnd(a + Math.random()*(b - a), d),
+  chance: p => Math.random() < p,
+  pick: arr => arr[Math.floor(Math.random()*arr.length)]
+};
+
+/* address helpers */
+function colName(c){ let s = ''; c++; while (c > 0){ const m = (c - 1) % 26; s = String.fromCharCode(65 + m) + s; c = Math.floor((c - 1)/26); } return s; }
+function colIdx(s){ let n = 0; for (const ch of s) n = n*26 + (ch.charCodeAt(0) - 64); return n - 1; }
+const A = (c, r) => colName(c) + (r + 1);
+function P(a){ const m = /^([A-Z]+)(\d+)$/.exec(a); return {c: colIdx(m[1]), r: +m[2] - 1}; }
+function addrs(rs){ const [a, b] = rs.split(':'); const p = P(a), q = P(b || a); const o = []; for (let r = Math.min(p.r,q.r); r <= Math.max(p.r,q.r); r++) for (let c = Math.min(p.c,q.c); c <= Math.max(p.c,q.c); c++) o.push(A(c, r)); return o; }
+
+/* ==================== i18n ==================== */
+const UI = {
+ru: {
+  appTitle:'Excel Практикум · 10 класс', appSub:'Формулы, СУММ, СРЗНАЧ, ОКРУГЛ, ЕСЛИ, СЦЕПИТЬ + кроссворд · уровень A',
+  lblName:'Фамилия и имя', lblClass:'Класс', start:'Начать работу',
+  offlineNote:'Работает без интернета. Прогресс сохраняется на этом устройстве.',
+  rules:['После нажатия «Начать работу» включится полноэкранный режим.',
+    'Выход из полноэкранного режима, переход в другое окно или вкладку <b>останавливает работу</b> и записывается как нарушение.',
+    'Решайте задачи <b>формулами</b>. Число, введённое вручную вместо формулы, не засчитывается.',
+    'Подходит любая правильная формула. При проверке система подставляет другие исходные данные — формула должна пересчитываться верно.'],
+  errName:'Введите фамилию, имя и класс.', teacher:'Для учителя: ответы и сброс',
+  taskBtn:'Задание', finish:'Завершить',
+  undo:'Отменить', redo:'Вернуть', copy:'Копировать', paste:'Вставить', clear:'Очистить',
+  fillDown:'Заполнить вниз', fillRight:'Заполнить вправо', abs:'Закрепить $', range:'Диапазон', funcs:'Функции',
+  modeReady:'Готово', modeEnter:'Ввод', modeEdit:'Правка', modePoint:'Укажите',
+  avg:'Среднее', count:'Количество', sum:'Сумма',
+  task:'Задача', check:'Проверить', points:'Баллы', checksDone:'Проверок',
+  aboutCheck:'Каждая задача — 10 баллов. Полный балл за пункт: верный ответ, подходящие функции Excel и одна формула, растянутая автозаполнением. Верное, но упрощённое решение — половина балла. При проверке исходные числа заменяются случайными — формулы должны давать верный результат и на них.',
+  q_func:'верно, но решение упрощённое — для этого есть более подходящая функция Excel',
+  q_uniform:'верно, но в ячейках разные формулы — нужна одна формула и автозаполнение',
+  rubricOne:'одна формула на весь диапазон', rubricFill:'одна формула + автозаполнение',
+  rubricNote:'Критерии: за пункт — полный балл, если ответ верный и использованы указанные функции (и одна формула с автозаполнением для диапазона). Верный ответ без них — половина балла. Неверно, число вместо формулы или формула ломается на других данных — 0. Баллы и функции меняются в массиве TASKS (поля p и want).',
+  st_ok:'верно', st_wrong:'неверный результат', st_empty:'не заполнено', st_noformula:'введено число вместо формулы',
+  st_fragile:'ответ совпал, но при других исходных данных формула ошибается', st_samefail:'в диапазоне разные формулы — нужна одна формула и автозаполнение',
+  badCells:'ячейки: ', solved:'Задача решена полностью!',
+  formulaErr:'Ошибка в формуле. Проверьте скобки, разделители «;» и кавычки.',
+  lockTitle:'Работа остановлена',
+  r_fs:'Вы вышли из полноэкранного режима.', r_blur:'Вы переключились на другое окно или программу.',
+  r_hidden:'Вкладка была скрыта или свёрнута.', r_reload:'Страница была перезагружена.',
+  lockCount:'Нарушение записано. Всего нарушений: ', lockCont:'Вернуться к работе',
+  lockPin:'Лимит самостоятельных возвратов исчерпан. Позовите учителя — нужен PIN-код.',
+  pinWrong:'Неверный PIN', unlock:'Разблокировать',
+  fsWarn:'На этом устройстве полноэкранный режим недоступен — переключение вкладок всё равно отслеживается.',
+  finishQ:'Завершить работу?', finishText:'Все задачи будут проверены. После завершения изменить ответы будет нельзя.',
+  cancel:'Отмена', yes:'Завершить', ok:'OK', close:'Закрыть',
+  resTitle:'Результаты работы', resDate:'Дата', resTime:'Время работы', resTask:'Задача', resScore:'Баллы',
+  resTotal:'Итого', resGrade:'Оценка', resViol:'Нарушения', resNone:'Нарушений нет',
+  download:'Скачать отчёт (.txt)', newStudent:'Новый ученик (PIN учителя)', pinAsk:'Введите PIN учителя',
+  fnTitle:'Справочник функций',
+  fnOps:'Операторы: + − * / ^ (степень) & (сцепить) = <> > < >= <=. Разделитель аргументов — «;». $A$1 — абсолютная ссылка, A1:B5 — диапазон. Английские названия (SUM, IF …) тоже работают. «Подробнее» — что писать в каждую часть, пример и частая ошибка. «Вставить в формулу» — добавить функцию в ячейку. ★ — функции этого урока.',
+  search:'Поиск…', timeLeft:'Осталось', timeUp:'Время вышло — работа завершена.',
+  violShort:'Нарушений', solTitle:'Ответы для учителя (пример решения; принимается любая верная формула)',
+  resetAll:'Сбросить работу на этом устройстве', resetDone:'Работа сброшена.',
+  vt_fs:'выход из полноэкранного режима', vt_blur:'переключение окна', vt_hidden:'скрытие вкладки', vt_reload:'перезагрузка страницы'
+},
+kz: {
+  appTitle:'Excel Практикум · 10 сынып', appSub:'Формулалар, СУММ, СРЗНАЧ, ОКРУГЛ, ЕСЛИ, СЦЕПИТЬ + сөзжұмбақ · A деңгейі',
+  lblName:'Тегі мен аты', lblClass:'Сынып', start:'Жұмысты бастау',
+  offlineNote:'Интернетсіз жұмыс істейді. Нәтиже осы құрылғыда сақталады.',
+  rules:['«Жұмысты бастау» батырмасын басқанда толық экран режимі қосылады.',
+    'Толық экраннан шығу, басқа терезеге немесе қойындыға ауысу <b>жұмысты тоқтатады</b> және бұзушылық ретінде тіркеледі.',
+    'Тапсырмаларды <b>формулалармен</b> шешіңіз. Формуланың орнына қолмен енгізілген сан есептелмейді.',
+    'Кез келген дұрыс формула қабылданады. Тексеру кезінде жүйе басқа бастапқы деректерді қояды — формула дұрыс қайта есептелуі керек.'],
+  errName:'Тегіңізді, атыңызды және сыныбыңызды енгізіңіз.', teacher:'Мұғалімге: жауаптар және қалпына келтіру',
+  taskBtn:'Тапсырма', finish:'Аяқтау',
+  undo:'Болдырмау', redo:'Қайтару', copy:'Көшіру', paste:'Қою', clear:'Тазалау',
+  fillDown:'Төмен толтыру', fillRight:'Оңға толтыру', abs:'$ бекіту', range:'Ауқым', funcs:'Функциялар',
+  modeReady:'Дайын', modeEnter:'Енгізу', modeEdit:'Түзету', modePoint:'Көрсетіңіз',
+  avg:'Орташа', count:'Саны', sum:'Қосынды',
+  task:'Тапсырма', check:'Тексеру', points:'Ұпай', checksDone:'Тексерулер',
+  aboutCheck:'Әр тапсырма — 10 ұпай. Тармақ үшін толық ұпай: жауап дұрыс, Excel-дің қолайлы функциялары қолданылған және бір формула автотолтырумен таратылған. Дұрыс, бірақ жеңілдетілген шешім — ұпайдың жартысы. Тексеру кезінде бастапқы сандар кездейсоқ сандармен ауыстырылады — формулалар оларда да дұрыс нәтиже беруі керек.',
+  q_func:'дұрыс, бірақ шешім жеңілдетілген — бұл үшін Excel-дің қолайлырақ функциясы бар',
+  q_uniform:'дұрыс, бірақ ұяшықтарда әртүрлі формулалар — бір формула және автотолтыру қажет',
+  rubricOne:'бүкіл ауқымға бір формула', rubricFill:'бір формула + автотолтыру',
+  rubricNote:'Критерийлер: тармақ үшін толық ұпай — жауап дұрыс және көрсетілген функциялар қолданылса (ауқым үшін — бір формула және автотолтыру). Оларсыз дұрыс жауап — ұпайдың жартысы. Қате, формуланың орнына сан немесе формула басқа деректерде қателессе — 0. Ұпайлар мен функциялар TASKS массивінде (p және want өрістері) өзгертіледі.',
+  st_ok:'дұрыс', st_wrong:'нәтиже қате', st_empty:'толтырылмаған', st_noformula:'формуланың орнына сан енгізілген',
+  st_fragile:'жауап сәйкес, бірақ басқа бастапқы деректерде формула қателеседі', st_samefail:'ауқымда әртүрлі формулалар — бір формула және автотолтыру қажет',
+  badCells:'ұяшықтар: ', solved:'Тапсырма толық шешілді!',
+  formulaErr:'Формулада қате бар. Жақшаларды, «;» бөлгіштерін және тырнақшаларды тексеріңіз.',
+  lockTitle:'Жұмыс тоқтатылды',
+  r_fs:'Сіз толық экран режимінен шықтыңыз.', r_blur:'Сіз басқа терезеге немесе бағдарламаға ауыстыңыз.',
+  r_hidden:'Қойынды жасырылды немесе кішірейтілді.', r_reload:'Бет қайта жүктелді.',
+  lockCount:'Бұзушылық тіркелді. Барлық бұзушылық саны: ', lockCont:'Жұмысқа оралу',
+  lockPin:'Өз бетіңізше оралу шегі таусылды. Мұғалімді шақырыңыз — PIN-код қажет.',
+  pinWrong:'PIN қате', unlock:'Құлыпты ашу',
+  fsWarn:'Бұл құрылғыда толық экран режимі қолжетімсіз — қойындыны ауыстыру бәрібір бақыланады.',
+  finishQ:'Жұмысты аяқтайсыз ба?', finishText:'Барлық тапсырма тексеріледі. Аяқтағаннан кейін жауаптарды өзгерту мүмкін болмайды.',
+  cancel:'Болдырмау', yes:'Аяқтау', ok:'OK', close:'Жабу',
+  resTitle:'Жұмыс нәтижелері', resDate:'Күні', resTime:'Жұмыс уақыты', resTask:'Тапсырма', resScore:'Ұпай',
+  resTotal:'Барлығы', resGrade:'Баға', resViol:'Бұзушылықтар', resNone:'Бұзушылық жоқ',
+  download:'Есепті жүктеу (.txt)', newStudent:'Жаңа оқушы (мұғалімнің PIN-коды)', pinAsk:'Мұғалімнің PIN-кодын енгізіңіз',
+  fnTitle:'Функциялар анықтамалығы',
+  fnOps:'Операторлар: + − * / ^ (дәреже) & (біріктіру) = <> > < >= <=. Аргументтерді бөлгіш — «;». $A$1 — абсолютті сілтеме, A1:B5 — ауқым. Ағылшынша атаулар (SUM, IF …) да жұмыс істейді. «Толығырақ» — әр бөлікке не жазу керек, мысал және жиі қате. «Формулаға қою» — функцияны ұяшыққа қосу. ★ — осы сабақтың функциялары.',
+  search:'Іздеу…', timeLeft:'Қалды', timeUp:'Уақыт бітті — жұмыс аяқталды.',
+  violShort:'Бұзушылық', solTitle:'Мұғалімге арналған жауаптар (шешім үлгісі; кез келген дұрыс формула қабылданады)',
+  resetAll:'Осы құрылғыдағы жұмысты тазалау', resetDone:'Жұмыс тазаланды.',
+  vt_fs:'толық экраннан шығу', vt_blur:'терезені ауыстыру', vt_hidden:'қойындыны жасыру', vt_reload:'бетті қайта жүктеу'
+}};
+
+/* accepted text answers (any language, case-insensitive) */
+const LABELS = {
+  yes:['ДА','ИӘ','ИА'], no:['НЕТ','ЖОҚ','ЖОК'],
+  def:['ДЕФИЦИТ','ТАПШЫЛЫҚ','ТАПШЫЛЫК'], norm:['НОРМА','ҚАЛЫПТЫ','КАЛЫПТЫ'],
+  over:['ИЗБЫТОК','АРТЫҚ САЛМАҚ','АРТЫК САЛМАК','АРТЫҚ'], obese:['ОЖИРЕНИЕ','СЕМІЗДІК','СЕМИЗДИК']
+};
+const normLab = v => v.replace(/[«»"]/g, '').trim().replace(/\s+/g, ' ').toUpperCase();
+const isLab = (v, key) => typeof v === 'string' && LABELS[key].includes(normLab(v));
+
+/* ==================== TASKS (Практикум для 10 класса: лёгкие формулы + кроссворд, уровень A) ====================
+   p     — баллы за пункт (в сумме 10 на задачу)
+   want  — какие функции нужны для полного балла: [[A или B], [C]] = (A или B) и C; '&' — сцепка
+   Уровень A: один шаг на пункт, в каждом пункте названа функция и почти везде дан образец формулы. */
+const TASK_MAX = 10;
+const CIF = ['COUNTIF','COUNTIFS'], CAT = ['CONCATENATE','&'];
+const TASKS = [];
+const HF = (ru, kz) => L(` — функция <b>${ru}</b>`, ` — <b>${kz || ru}</b> функциясы`);
+const YES = L('да','иә'), NO = L('нет','жоқ');
+const yn = b => b ? '@yes' : '@no';
+const isYes = v => isLab(v, 'yes');
+const up = v => String(v === null || v === undefined ? '' : v).trim().toUpperCase();
+
+/* ---------- 1. Канцтовары: умножение, СУММ, МАКС ---------- */
+{
+const R = range(2,9);
+TASKS.push({
+  id:'shop', title:L('Покупка канцтоваров','Кеңсе тауарларын сатып алу'), cols:8, rows:12,
+  widths:{A:110,B:80,C:80,D:100,E:24,F:200,G:80,H:40},
+  blocks:[
+    ['A1',[[L('Товар','Тауар'),L('Цена, тг','Бағасы, тг'),L('Кол-во','Саны'),L('Сумма, тг','Сомасы, тг'),null,L('Показатель','Көрсеткіш'),L('Значение','Мәні')]]],
+    ['A2',[[L('Тетрадь','Дәптер'),150,12],[L('Ручка','Қалам'),120,20],[L('Карандаш','Қарындаш'),80,15],[L('Линейка','Сызғыш'),200,5],[L('Ластик','Өшіргіш'),90,10],['Маркер',350,4],['Папка',400,6],[L('Клей','Желім'),250,3]]],
+    ['F2',[[L('Итого к оплате, тг','Барлығы төлеуге, тг')],[L('Самая высокая цена, тг','Ең жоғары баға, тг')],[L('Всего штук','Барлығы дана')]]]
+  ],
+  styles:[['A1:D1','h'],['F1:G1','h'],['F2:F4','lbl'],['B2:D9','c']],
+  text:L(
+`<p>Класс покупает канцтовары. Формула всегда начинается со знака <code>=</code>.</p>
+<ol>
+<li><code>D2</code> — сумма за товар: цена × количество. Образец: <code>=B2*C2</code>. Потом протяните формулу вниз до <code>D9</code> (или выделите <code>D2:D9</code> и нажмите «Заполнить вниз»).</li>
+<li><code>G2</code> — итого к оплате${HF('СУММ').ru}: <code>=СУММ(D2:D9)</code></li>
+<li><code>G3</code> — самая высокая цена товара${HF('МАКС').ru}.</li>
+<li><code>G4</code> — сколько всего штук купили (сумма столбца C)${HF('СУММ').ru}.</li>
+</ol>`,
+`<p>Сынып кеңсе тауарларын сатып алады. Формула әрқашан <code>=</code> белгісімен басталады.</p>
+<ol>
+<li><code>D2</code> — тауардың сомасы: баға × саны. Үлгі: <code>=B2*C2</code>. Содан кейін формуланы <code>D9</code>-ға дейін төмен созыңыз (немесе <code>D2:D9</code> белгілеп, «Төмен толтыру» басыңыз).</li>
+<li><code>G2</code> — барлығы төлеуге${HF('СУММ').kz}: <code>=СУММ(D2:D9)</code></li>
+<li><code>G3</code> — тауардың ең жоғары бағасы${HF('МАКС').kz}.</li>
+<li><code>G4</code> — барлығы неше дана сатып алынды (C бағанының қосындысы)${HF('СУММ').kz}.</li>
+</ol>`),
+  checks:[
+    {cells:'D2:D9', p:4, name:L('сумма','сома'), expect:(V,r)=>V('B'+r)*V('C'+r)},
+    {cells:'G2', p:2, want:[['SUM']], dep:'D2:D9', alt:V=>sumA(R.map(k=>V('D'+k))), name:L('итого','барлығы'), expect:V=>sumA(R.map(k=>V('B'+k)*V('C'+k)))},
+    {cells:'G3', p:2, want:[['MAX','LARGE']], name:L('макс. цена','ең жоғары баға'), expect:V=>Math.max(...R.map(k=>V('B'+k)))},
+    {cells:'G4', p:2, want:[['SUM']], name:L('всего штук','барлығы дана'), expect:V=>sumA(R.map(k=>V('C'+k)))}
+  ],
+  perturb(set){ for (const r of R){ set('B'+r, RND.int(5,50)*10); set('C'+r, RND.int(1,20)); } },
+  sol:[['D2:D9','=B2*C2'],['G2','=СУММ(D2:D9)'],['G3','=МАКС(B2:B9)'],['G4','=СУММ(C2:C9)']]
+});
+}
+
+/* ---------- 2. Погода за неделю: СРЗНАЧ, ОКРУГЛ, МАКС, МИН ---------- */
+{
+const R = range(2,8);
+const t = V => R.map(k => V('B'+k));
+TASKS.push({
+  id:'week', title:L('Погода за неделю','Апталық ауа райы'), cols:7, rows:11,
+  widths:{A:120,B:110,C:24,D:240,E:80,F:40,G:40},
+  blocks:[
+    ['A1',[[L('День','Күн'),L('Днём, °C','Күндіз, °C'),null,L('Показатель','Көрсеткіш'),L('Значение','Мәні')]]],
+    ['A2',[[L('Понедельник','Дүйсенбі'),4],[L('Вторник','Сейсенбі'),7],[L('Среда','Сәрсенбі'),-2],[L('Четверг','Бейсенбі'),0],[L('Пятница','Жұма'),5],[L('Суббота','Сенбі'),9],[L('Воскресенье','Жексенбі'),3]]],
+    ['D2',[[L('Средняя температура (до десятых)','Орташа температура (ондыққа дейін)')],[L('Самый тёплый день, °C','Ең жылы күн, °C')],[L('Самый холодный день, °C','Ең суық күн, °C')],[L('Перепад (тёплый − холодный)','Айырма (жылы − суық)')]]]
+  ],
+  styles:[['A1:B1','h'],['D1:E1','h'],['D2:D5','lbl'],['B2:B8','c']],
+  text:L(
+`<p>Температура днём за неделю.</p>
+<ol>
+<li><code>E2</code> — средняя температура, округлённая до десятых — <b>ОКРУГЛ</b> и <b>СРЗНАЧ</b>: <code>=ОКРУГЛ(СРЗНАЧ(B2:B8);1)</code></li>
+<li><code>E3</code> — самая высокая температура${HF('МАКС').ru}.</li>
+<li><code>E4</code> — самая низкая температура${HF('МИН').ru}.</li>
+<li><code>E5</code> — перепад: из самой высокой вычесть самую низкую. Образец: <code>=E3-E4</code></li>
+</ol>
+<p class="note">Минус перед числом — это мороз. 9 − (−2) = 11.</p>`,
+`<p>Апта бойы күндізгі температура.</p>
+<ol>
+<li><code>E2</code> — ондыққа дейін дөңгелектелген орташа температура — <b>ОКРУГЛ</b> және <b>СРЗНАЧ</b>: <code>=ОКРУГЛ(СРЗНАЧ(B2:B8);1)</code></li>
+<li><code>E3</code> — ең жоғары температура${HF('МАКС').kz}.</li>
+<li><code>E4</code> — ең төмен температура${HF('МИН').kz}.</li>
+<li><code>E5</code> — айырма: ең жоғарыдан ең төменді шегеру. Үлгі: <code>=E3-E4</code></li>
+</ol>
+<p class="note">Сан алдындағы минус — аяз. 9 − (−2) = 11.</p>`),
+  checks:[
+    {cells:'E2', p:3, want:[['ROUND'],['AVERAGE']], name:L('средняя','орташа'), expect:V=>rnd(avgA(t(V)),1)},
+    {cells:'E3', p:2, want:[['MAX','LARGE']], name:L('максимум','ең жоғары'), expect:V=>Math.max(...t(V))},
+    {cells:'E4', p:2, want:[['MIN','SMALL']], name:L('минимум','ең төмен'), expect:V=>Math.min(...t(V))},
+    {cells:'E5', p:3, dep:'E3 E4', alt:V=>V('E3')-V('E4'), name:L('перепад','айырма'), expect:V=>Math.max(...t(V))-Math.min(...t(V))}
+  ],
+  perturb(set){ for (const r of R) set('B'+r, RND.int(-10,15)); },
+  sol:[['E2','=ОКРУГЛ(СРЗНАЧ(B2:B8);1)'],['E3','=МАКС(B2:B8)'],['E4','=МИН(B2:B8)'],['E5','=E3-E4']]
+});
+}
+
+/* ---------- 3. Оценки: СРЗНАЧ, ОКРУГЛ, МАКС, СЧЁТЕСЛИ ---------- */
+{
+const R = range(2,9), C3 = ['B','C','D'];
+const avg = (V,r) => rnd(avgA(C3.map(c => V(c+r))), 1);
+TASKS.push({
+  id:'marks', title:L('Оценки за четверть','Тоқсандық бағалар'), cols:10, rows:12,
+  widths:{A:110,B:66,C:66,D:66,E:80,F:24,G:250,H:70,I:30,J:30},
+  blocks:[
+    ['A1',[[L('Ученик','Оқушы'),L('СОР 1','БЖБ 1'),L('СОР 2','БЖБ 2'),L('СОЧ','ТЖБ'),L('Средняя','Орташа'),null,L('Показатель','Көрсеткіш'),L('Значение','Мәні')]]],
+    ['A2',[['Айбек Р.',5,4,5],['Сабина К.',4,4,3],['Даурен М.',3,4,3],['Алия Ш.',5,5,5],['Руслан Т.',3,2,4],['Камила Б.',4,5,4],['Ержан С.',5,3,4],['Дана И.',4,4,5]]],
+    ['G2',[[L('Средняя по классу (до десятых)','Сынып бойынша орташа (ондыққа дейін)')],[L('Лучшая средняя','Ең жақсы орташа')],[L('Учеников со средней 4 и выше','Орташасы 4 және одан жоғары оқушылар')]]]
+  ],
+  styles:[['A1:E1','h'],['G1:H1','h'],['G2:G4','lbl'],['B2:E9','c']],
+  text:L(
+`<p>Оценки учеников за четверть.</p>
+<ol>
+<li><code>E2:E9</code> — средняя оценка ученика, округлённая до десятых — <b>ОКРУГЛ</b> и <b>СРЗНАЧ</b>: <code>=ОКРУГЛ(СРЗНАЧ(B2:D2);1)</code>, затем протяните вниз.</li>
+<li><code>H2</code> — средняя по классу (среднее столбца E), до десятых — <b>ОКРУГЛ</b> и <b>СРЗНАЧ</b>.</li>
+<li><code>H3</code> — самая высокая средняя${HF('МАКС').ru}.</li>
+<li><code>H4</code> — сколько учеников имеют среднюю 4 и выше${HF('СЧЁТЕСЛИ').ru}: <code>=СЧЁТЕСЛИ(E2:E9;">=4")</code></li>
+</ol>`,
+`<p>Оқушылардың тоқсандық бағалары.</p>
+<ol>
+<li><code>E2:E9</code> — оқушының ондыққа дейін дөңгелектелген орташа бағасы — <b>ОКРУГЛ</b> және <b>СРЗНАЧ</b>: <code>=ОКРУГЛ(СРЗНАЧ(B2:D2);1)</code>, содан кейін төмен созыңыз.</li>
+<li><code>H2</code> — сынып бойынша орташа (E бағанының орташасы), ондыққа дейін — <b>ОКРУГЛ</b> және <b>СРЗНАЧ</b>.</li>
+<li><code>H3</code> — ең жоғары орташа баға${HF('МАКС').kz}.</li>
+<li><code>H4</code> — орташасы 4 және одан жоғары оқушылар саны${HF('СЧЁТЕСЛИ').kz}: <code>=СЧЁТЕСЛИ(E2:E9;">=4")</code></li>
+</ol>`),
+  checks:[
+    {cells:'E2:E9', p:4, want:[['ROUND'],['AVERAGE']], name:L('средняя','орташа'), expect:(V,r)=>avg(V,r)},
+    {cells:'H2', p:2, want:[['ROUND'],['AVERAGE']], dep:'E2:E9', alt:V=>rnd(avgA(R.map(k=>V('E'+k))),1), name:L('по классу','сынып бойынша'), expect:V=>[rnd(avgA(R.map(k=>avg(V,k))),1), rnd(avgA(R.flatMap(k=>C3.map(c=>V(c+k)))),1)]},
+    {cells:'H3', p:2, want:[['MAX','LARGE']], dep:'E2:E9', alt:V=>Math.max(...R.map(k=>V('E'+k))), name:L('лучшая','ең жақсы'), expect:V=>Math.max(...R.map(k=>avg(V,k)))},
+    {cells:'H4', p:2, want:[CIF], dep:'E2:E9', alt:V=>R.filter(k=>V('E'+k)>=4).length, name:L('4 и выше','4 және жоғары'), expect:V=>R.filter(k=>avg(V,k)>=4).length}
+  ],
+  perturb(set){ for (const r of R) C3.forEach(c => set(c+r, RND.int(2,5))); },
+  sol:[['E2:E9','=ОКРУГЛ(СРЗНАЧ(B2:D2);1)'],['H2','=ОКРУГЛ(СРЗНАЧ(E2:E9);1)'],['H3','=МАКС(E2:E9)'],['H4','=СЧЁТЕСЛИ(E2:E9;">=4")']]
+});
+}
+
+/* ---------- 4. Распродажа: абсолютная ссылка $ ---------- */
+{
+const R = range(2,7);
+const price = (V,r) => V('B'+r)*(100-V('G2'))/100;
+TASKS.push({
+  id:'sale', title:L('Распродажа гаджетов','Гаджеттер жәрмеңкесі'), cols:8, rows:10,
+  widths:{A:130,B:90,C:130,D:100,E:24,F:200,G:80,H:40},
+  blocks:[
+    ['A1',[[L('Товар','Тауар'),L('Цена, тг','Бағасы, тг'),L('Цена со скидкой','Жеңілдікпен бағасы'),L('Экономия, тг','Үнемделді, тг'),null,L('Показатель','Көрсеткіш'),L('Значение','Мәні')]]],
+    ['A2',[[L('Наушники','Құлаққап'),8000],[L('Мышь','Тінтуір'),4500],[L('Клавиатура','Пернетақта'),9000],['Флешка',3500],['Колонка',12000],[L('Веб-камера','Веб-камера'),15000]]],
+    ['F2',[[L('Скидка, %','Жеңілдік, %'),20],[L('Общая экономия, тг','Жалпы үнемделгені, тг'),null]]]
+  ],
+  styles:[['A1:D1','h'],['F1:G1','h'],['F2:F3','lbl'],['G2','p'],['B2:D7','c']],
+  text:L(
+`<p>В магазине скидка на все товары. Процент скидки — в ячейке <code>G2</code>. Чтобы при протягивании ссылка на <code>G2</code> не «уехала» вниз, закрепите её знаком <code>$</code>: <code>$G$2</code> (кнопка «Закрепить $» или клавиша F4).</p>
+<ol>
+<li><code>C2:C7</code> — цена со скидкой. Образец: <code>=B2*(100-$G$2)/100</code></li>
+<li><code>D2:D7</code> — сколько денег сэкономили: старая цена − новая цена. Образец: <code>=B2-C2</code></li>
+<li><code>G3</code> — общая экономия (сумма столбца D)${HF('СУММ').ru}.</li>
+</ol>
+<p class="note">Проверьте себя: поменяйте скидку в <code>G2</code> на 50 — все цены должны пересчитаться.</p>`,
+`<p>Дүкенде барлық тауарға жеңілдік. Жеңілдік пайызы — <code>G2</code> ұяшығында. Созғанда <code>G2</code>-ге сілтеме төмен «жылжып» кетпес үшін, оны <code>$</code> белгісімен бекітіңіз: <code>$G$2</code> («$ бекіту» батырмасы немесе F4 пернесі).</p>
+<ol>
+<li><code>C2:C7</code> — жеңілдікпен бағасы. Үлгі: <code>=B2*(100-$G$2)/100</code></li>
+<li><code>D2:D7</code> — қанша ақша үнемделді: ескі баға − жаңа баға. Үлгі: <code>=B2-C2</code></li>
+<li><code>G3</code> — жалпы үнемделгені (D бағанының қосындысы)${HF('СУММ').kz}.</li>
+</ol>
+<p class="note">Өзіңізді тексеріңіз: <code>G2</code>-дегі жеңілдікті 50-ге өзгертіңіз — барлық баға қайта есептелуі керек.</p>`),
+  checks:[
+    {cells:'C2:C7', p:4, name:L('цена со скидкой','жеңілдікпен баға'), expect:(V,r)=>price(V,r)},
+    {cells:'D2:D7', p:3, dep:'C2:C7', alt:(V,r)=>V('B'+r)-V('C'+r), name:L('экономия','үнемделді'), expect:(V,r)=>V('B'+r)-price(V,r)},
+    {cells:'G3', p:3, want:[['SUM']], dep:'D2:D7', alt:V=>sumA(R.map(k=>V('D'+k))), name:L('общая экономия','жалпы үнемделгені'), expect:V=>sumA(R.map(k=>V('B'+k)-price(V,k)))}
+  ],
+  perturb(set){ set('G2', [10,15,25,30,40,50][RND.int(0,5)]); for (const r of R) set('B'+r, RND.int(20,200)*100); },
+  sol:[['C2:C7','=B2*(100-$G$2)/100'],['D2:D7','=B2-C2'],['G3','=СУММ(D2:D7)']]
+});
+}
+
+/* ---------- 5. Файлы на флешке: деление, ОКРУГЛ, СУММ, ЕСЛИ ---------- */
+{
+const R = range(2,7);
+const totMb = V => rnd(sumA(R.map(k=>V('B'+k)))/1024, 1);
+TASKS.push({
+  id:'files', title:L('Файлы на флешку','Флешкаға файлдар'), cols:8, rows:10,
+  widths:{A:160,B:100,C:100,D:24,E:230,F:80,G:40,H:40},
+  blocks:[
+    ['A1',[[L('Файл','Файл'),L('Размер, КБ','Көлемі, КБ'),L('Размер, МБ','Көлемі, МБ'),null,L('Показатель','Көрсеткіш'),L('Значение','Мәні')]]],
+    ['A2',[[L('доклад.docx','баяндама.docx'),850],[L('фото.jpg','фото.jpg'),3200],[L('презентация.pptx','презентация.pptx'),15600],[L('песня.mp3','ән.mp3'),5400],[L('видео.mp4','видео.mp4'),48500],[L('таблица.xlsx','кесте.xlsx'),420]]],
+    ['E2',[[L('Свободно на флешке, МБ','Флешкада бос орын, МБ')],[L('Всего, КБ','Барлығы, КБ')],[L('Всего, МБ (до десятых)','Барлығы, МБ (ондыққа дейін)')],[L('Поместится?','Сыя ма?')]]],
+    ['F2',[[64]]]
+  ],
+  styles:[['A1:C1','h'],['E1:F1','h'],['E2:E5','lbl'],['F2','p'],['B2:C7','c']],
+  text:L(
+`<p>Нужно скопировать файлы на флешку. Помните: <b>1 МБ = 1024 КБ</b>.</p>
+<ol>
+<li><code>C2:C7</code> — размер файла в МБ, округлённый до сотых${HF('ОКРУГЛ').ru}: <code>=ОКРУГЛ(B2/1024;2)</code></li>
+<li><code>F3</code> — общий размер всех файлов в КБ${HF('СУММ').ru}.</li>
+<li><code>F4</code> — общий размер в МБ, до десятых${HF('ОКРУГЛ').ru}: <code>=ОКРУГЛ(F3/1024;1)</code></li>
+<li><code>F5</code> — «да», если файлы поместятся (общий размер в МБ не больше свободного места <code>F2</code>), иначе «нет»${HF('ЕСЛИ').ru}: <code>=ЕСЛИ(F4<=F2;"да";"нет")</code></li>
+</ol>`,
+`<p>Файлдарды флешкаға көшіру керек. Есте сақтаңыз: <b>1 МБ = 1024 КБ</b>.</p>
+<ol>
+<li><code>C2:C7</code> — файлдың МБ-тағы көлемі, жүздікке дейін дөңгелектелген${HF('ОКРУГЛ').kz}: <code>=ОКРУГЛ(B2/1024;2)</code></li>
+<li><code>F3</code> — барлық файлдардың КБ-тағы жалпы көлемі${HF('СУММ').kz}.</li>
+<li><code>F4</code> — МБ-тағы жалпы көлемі, ондыққа дейін${HF('ОКРУГЛ').kz}: <code>=ОКРУГЛ(F3/1024;1)</code></li>
+<li><code>F5</code> — файлдар сыйса (жалпы көлемі МБ-та <code>F2</code> бос орыннан артық болмаса) «иә», әйтпесе «жоқ»${HF('ЕСЛИ').kz}: <code>=ЕСЛИ(F4<=F2;"иә";"жоқ")</code></li>
+</ol>`),
+  checks:[
+    {cells:'C2:C7', p:3, want:[['ROUND']], name:L('размер, МБ','көлемі, МБ'), expect:(V,r)=>rnd(V('B'+r)/1024,2)},
+    {cells:'F3', p:2, want:[['SUM']], name:L('всего, КБ','барлығы, КБ'), expect:V=>sumA(R.map(k=>V('B'+k)))},
+    {cells:'F4', p:2, want:[['ROUND']], dep:'F3', alt:V=>rnd(V('F3')/1024,1), name:L('всего, МБ','барлығы, МБ'), expect:V=>totMb(V)},
+    {cells:'F5', p:3, want:[['IF']], dep:'F4', alt:V=>yn(V('F4')<=V('F2')), name:L('поместится?','сыя ма?'), expect:V=>yn(totMb(V)<=V('F2'))}
+  ],
+  perturb(set){ set('F2', [16,32,64,128][RND.int(0,3)]); for (const r of R) set('B'+r, RND.int(100,40000)); },
+  sol:[['C2:C7','=ОКРУГЛ(B2/1024;2)'],['F3','=СУММ(B2:B7)'],['F4','=ОКРУГЛ(F3/1024;1)'],['F5','=ЕСЛИ(F4<=F2;"да";"нет")']]
+});
+}
+
+/* ---------- 6. Зачёт: простое ЕСЛИ, СЧЁТЕСЛИ ---------- */
+{
+const R = range(2,11);
+TASKS.push({
+  id:'pass', title:L('Зачёт по информатике','Информатикадан сынақ'), cols:8, rows:14,
+  widths:{A:110,B:80,C:90,D:24,E:230,F:80,G:40,H:40},
+  blocks:[
+    ['A1',[[L('Ученик','Оқушы'),L('Баллы','Ұпай'),L('Зачёт','Сынақ'),null,L('Показатель','Көрсеткіш'),L('Значение','Мәні')]]],
+    ['A2',[['Айбек Р.',72],['Сабина К.',50],['Даурен М.',38],['Алия Ш.',91],['Руслан Т.',49],['Камила Б.',66],['Ержан С.',55],['Дана И.',43],['Мирас А.',80],['Инкар Ж.',61]]],
+    ['E2',[[L('Проходной балл','Өту ұпайы')],[L('Сдали зачёт','Сынақ тапсырғандар')],[L('Средний балл (до целого)','Орташа ұпай (бүтінге дейін)')]]],
+    ['F2',[[50]]]
+  ],
+  styles:[['A1:C1','h'],['E1:F1','h'],['E2:E4','lbl'],['F2','p'],['B2:C11','c']],
+  text:L(
+`<p>Результаты зачёта (максимум 100). Проходной балл — в <code>F2</code>. Ровно 50 — зачёт сдан.</p>
+<ol>
+<li><code>C2:C11</code> — «да», если баллы не меньше проходного, иначе «нет»${HF('ЕСЛИ').ru}: <code>=ЕСЛИ(B2>=$F$2;"да";"нет")</code></li>
+<li><code>F3</code> — сколько учеников сдали зачёт${HF('СЧЁТЕСЛИ').ru}: <code>=СЧЁТЕСЛИ(C2:C11;"да")</code></li>
+<li><code>F4</code> — средний балл, округлённый до целого — <b>ОКРУГЛ</b> и <b>СРЗНАЧ</b>.</li>
+</ol>
+<p class="note">ЕСЛИ(условие; что написать, если ДА; что написать, если НЕТ). Текст — в кавычках.</p>`,
+`<p>Сынақ нәтижелері (ең көбі 100). Өту ұпайы — <code>F2</code>-де. Дәл 50 — сынақ тапсырылды.</p>
+<ol>
+<li><code>C2:C11</code> — ұпай өту ұпайынан кем болмаса «иә», әйтпесе «жоқ»${HF('ЕСЛИ').kz}: <code>=ЕСЛИ(B2>=$F$2;"иә";"жоқ")</code></li>
+<li><code>F3</code> — сынақ тапсырған оқушылар саны${HF('СЧЁТЕСЛИ').kz}: <code>=СЧЁТЕСЛИ(C2:C11;"иә")</code></li>
+<li><code>F4</code> — бүтінге дейін дөңгелектелген орташа ұпай — <b>ОКРУГЛ</b> және <b>СРЗНАЧ</b>.</li>
+</ol>
+<p class="note">ЕСЛИ(шарт; ИӘ болса не жазу; ЖОҚ болса не жазу). Мәтін — тырнақшада.</p>`),
+  checks:[
+    {cells:'C2:C11', p:4, want:[['IF']], name:L('зачёт','сынақ'), expect:(V,r)=>yn(V('B'+r)>=V('F2'))},
+    {cells:'F3', p:3, want:[CIF], dep:'C2:C11', alt:(V,r,cl,G)=>R.filter(k=>isYes(G('C'+k))).length, name:L('сдали','тапсырғандар'), expect:V=>R.filter(k=>V('B'+k)>=V('F2')).length},
+    {cells:'F4', p:3, want:[['ROUND'],['AVERAGE']], name:L('средний балл','орташа ұпай'), expect:V=>rnd(avgA(R.map(k=>V('B'+k))),0)}
+  ],
+  perturb(set){ set('F2', [40,45,55,60][RND.int(0,3)]); for (const r of R) set('B'+r, RND.int(20,100)); },
+  sol:[['C2:C11','=ЕСЛИ(B2>=$F$2;"да";"нет")'],['F3','=СЧЁТЕСЛИ(C2:C11;"да")'],['F4','=ОКРУГЛ(СРЗНАЧ(B2:B11);0)']]
+});
+}
+
+/* ---------- 7. Бейджи: СЦЕПИТЬ / & ---------- */
+{
+const R = range(2,9);
+const nm = (G,r) => `${G('B'+r)} ${G('A'+r)}`;
+const LBL = L('Всего учеников: ','Барлық оқушы: ');
+TASKS.push({
+  id:'badge', title:L('Бейджи на конференцию','Конференцияға бейдждер'), cols:7, rows:12,
+  widths:{A:110,B:100,C:70,D:150,E:200,F:24,G:240},
+  blocks:[
+    ['A1',[[L('Фамилия','Тегі'),L('Имя','Аты'),L('Класс','Сынып'),L('Имя Фамилия','Аты Тегі'),L('Бейдж','Бейдж'),null,L('Итог','Қорытынды')]]],
+    ['A2',[['Ахметов','Айбек','10 А'],['Каримова','Сабина','10 Б'],['Муратов','Даурен','10 А'],['Шарипова','Алия','10 В'],['Турсынов','Руслан','10 Б'],['Бекова','Камила','10 А'],['Сериков','Ержан','10 В'],['Исаева','Дана','10 Б']]]
+  ],
+  styles:[['A1:E1','h'],['G1','h'],['C2:C9','c']],
+  text:L(
+`<p>Готовим бейджи для участников конференции. <b>СЦЕПИТЬ</b> склеивает текст из нескольких ячеек. Пробел и запятую добавляем в кавычках: <code>" "</code>, <code>", "</code>. Вместо СЦЕПИТЬ можно использовать знак <code>&</code>.</p>
+<ol>
+<li><code>D2:D9</code> — «Имя Фамилия» (сначала имя, потом пробел, потом фамилия)${HF('СЦЕПИТЬ').ru}: <code>=СЦЕПИТЬ(B2;" ";A2)</code> → <i>Айбек Ахметов</i></li>
+<li><code>E2:E9</code> — бейдж «Имя Фамилия, класс»${HF('СЦЕПИТЬ').ru}: <code>=СЦЕПИТЬ(D2;", ";C2)</code> → <i>Айбек Ахметов, 10 А</i></li>
+<li><code>G2</code> — надпись «Всего учеников: 8», где число считает <b>СЧЁТЗ</b>: <code>=СЦЕПИТЬ("Всего учеников: ";СЧЁТЗ(A2:A9))</code></li>
+</ol>
+<p class="note">Забыли <code>" "</code> — получится «АйбекАхметов» без пробела.</p>`,
+`<p>Конференция қатысушыларына бейдж дайындаймыз. <b>СЦЕПИТЬ</b> бірнеше ұяшықтағы мәтінді біріктіреді. Бос орын мен үтірді тырнақшада қосамыз: <code>" "</code>, <code>", "</code>. СЦЕПИТЬ орнына <code>&</code> белгісін қолдануға болады.</p>
+<ol>
+<li><code>D2:D9</code> — «Аты Тегі» (алдымен аты, сосын бос орын, сосын тегі)${HF('СЦЕПИТЬ').kz}: <code>=СЦЕПИТЬ(B2;" ";A2)</code> → <i>Айбек Ахметов</i></li>
+<li><code>E2:E9</code> — «Аты Тегі, сынып» бейджі${HF('СЦЕПИТЬ').kz}: <code>=СЦЕПИТЬ(D2;", ";C2)</code> → <i>Айбек Ахметов, 10 А</i></li>
+<li><code>G2</code> — «Барлық оқушы: 8» жазуы, саны <b>СЧЁТЗ</b> арқылы есептеледі: <code>=СЦЕПИТЬ("Барлық оқушы: ";СЧЁТЗ(A2:A9))</code></li>
+</ol>
+<p class="note"><code>" "</code> ұмытсаңыз — «АйбекАхметов» бос орынсыз шығады.</p>`),
+  checks:[
+    {cells:'D2:D9', p:4, want:[CAT], name:L('имя фамилия','аты тегі'), expect:(V,r,cl,G)=>nm(G,r)},
+    {cells:'E2:E9', p:3, want:[CAT], name:L('бейдж','бейдж'), expect:(V,r,cl,G)=>`${nm(G,r)}, ${G('C'+r)}`},
+    {cells:'G2', p:3, want:[CAT,['COUNTA']], name:L('итог','қорытынды'), expect:(V,r,cl,G)=>{ const n = R.filter(k=>G('A'+k)!==null&&G('A'+k)!=='').length, l = tr(LBL); return [l + n, l.trim() + n, l.trim() + '  ' + n]; }}
+  ],
+  perturb(set){ const F = ['Ахметов','Нурланов','Жаксыбек','Омарова','Алиева','Касымов'], I = ['Арман','Аружан','Тимур','Мадина','Нурсултан','Айгерим'];
+    for (const r of R){ set('A'+r, F[RND.int(0,5)]); set('B'+r, I[RND.int(0,5)]); set('C'+r, '10 ' + ['А','Б','В'][RND.int(0,2)]); } },
+  sol:[['D2:D9','=СЦЕПИТЬ(B2;" ";A2)'],['E2:E9','=СЦЕПИТЬ(D2;", ";C2)'],['G2','=СЦЕПИТЬ("Всего учеников: ";СЧЁТЗ(A2:A9))']]
+});
+}
+
+/* ---------- 8. Кроссворд с автопроверкой: СЦЕПИТЬ + ЕСЛИ + СУММ ---------- */
+{
+const KEYC = 'G', KEY = 'ФОРМУЛА';
+/* слово, первая колонка; ключевая буква всегда в колонке G */
+const W = [['ФАЙЛ','G'],['МОНИТОР','F'],['ПРИНТЕР','F'],['МОДЕМ','G'],['КУРСОР','F'],['ПИКСЕЛЬ','B'],['БАЙТ','F']];
+const COLS = 'ABCDEFGHIJKLMNOP';
+const cellsOf = i => { const [w, c0] = W[i], s = COLS.indexOf(c0); return [...w].map((_, j) => COLS[s + j] + (i + 2)); };
+const word = (G,i) => cellsOf(i).map(a => { const v = G(a); return v === null || v === undefined ? '' : String(v); }).join('');
+const keyw = G => W.map((_, i) => { const v = G(KEYC + (i + 2)); return v === null || v === undefined ? '' : String(v); }).join('');
+const rowsI = W.map((_, i) => i);
+const pts = (G,i) => up(word(G,i)) === W[i][0] ? 1 : 0;
+const kpts = G => up(keyw(G)) === KEY ? 3 : 0;
+const allCells = rowsI.flatMap(cellsOf);
+const keyCells = rowsI.map(i => KEYC + (i + 2));
+const rng = (i) => { const c = cellsOf(i); return c[0] + ':' + c[c.length - 1]; };
+TASKS.push({
+  id:'cross', title:L('Кроссворд с автопроверкой','Автотексерілетін сөзжұмбақ'), cols:15, rows:14,
+  widths:{A:40,B:34,C:34,D:34,E:34,F:34,G:34,H:34,I:34,J:34,K:34,L:34,M:150,N:120,O:70},
+  blocks:[
+    ['A1',[['№',null,null,null,null,null,null,null,null,null,null,null,null,L('Слово','Сөз'),L('Баллы','Ұпай')]]],
+    ['A2',[[1],[2],[3],[4],[5],[6],[7]]],
+    ['M10',[[L('Ключевое слово','Кілт сөз')],[null],[L('Итого баллов','Барлық ұпай')]]]
+  ],
+  styles:[['A1:O1','h'],['A2:A8','h'],...allCells.filter(a => !keyCells.includes(a)).map(a => [a,'p c']),...keyCells.map(a => [a,'h c']),['M10','lbl'],['M12','lbl'],['N2:O12','c']],
+  text:L(
+`<p>Это кроссворд, который <b>сам себя проверяет</b>. Голубые клетки — для букв (одна буква в клетке). Зелёный столбец <code>G</code> — ключевое слово.</p>
+<p><b>Вопросы (все слова — термины информатики):</b></p>
+<ol>
+<li>Именованная область данных на диске (4 буквы).</li>
+<li>Устройство вывода изображения на экран (7).</li>
+<li>Устройство для печати на бумаге (7).</li>
+<li>Модулятор-демодулятор: подключает компьютер к сети по телефонной линии (5).</li>
+<li>Мигающий указатель места ввода текста (6).</li>
+<li>Самая маленькая точка изображения на экране (7).</li>
+<li>Единица информации, равная 8 битам (4).</li>
+</ol>
+<p><b>Задание:</b></p>
+<ol>
+<li>Впишите ответы по буквам в голубые клетки.</li>
+<li><code>N2:N8</code> — склейте буквы слова в одну ячейку${HF('СЦЕПИТЬ').ru}. Для строки 2: <code>=СЦЕПИТЬ(G2;H2;I2;J2)</code>. Для каждой строки — свои клетки (протягивать нельзя!).</li>
+<li><code>O2:O8</code> — 1 балл, если слово верное, иначе 0${HF('ЕСЛИ').ru}. Для строки 2: <code>=ЕСЛИ(N2="ФАЙЛ";1;0)</code></li>
+<li><code>N10</code> — ключевое слово: склейте буквы столбца G (<code>G2</code>…<code>G8</code>)${HF('СЦЕПИТЬ').ru}.</li>
+<li><code>O10</code> — 3 бонусных балла, если ключевое слово = «ФОРМУЛА», иначе 0${HF('ЕСЛИ').ru}.</li>
+<li><code>O12</code> — итого баллов${HF('СУММ').ru}: <code>=СУММ(O2:O10)</code></li>
+</ol>
+<p class="note">Проверьте: впишите одну букву неправильно — балл за слово должен стать 0. Так работают онлайн-кроссворды. Хватит времени — придумайте свой кроссворд на свободных клетках!</p>`,
+`<p>Бұл — <b>өзін-өзі тексеретін</b> сөзжұмбақ. Көгілдір ұяшықтар — әріптерге (бір ұяшыққа бір әріп). Жасыл <code>G</code> бағаны — кілт сөз.</p>
+<p><b>Сұрақтар (барлық сөз — информатика терминдері, орысша жазылады):</b></p>
+<ol>
+<li>Дискідегі атауы бар деректер аймағы (4 әріп).</li>
+<li>Экранға кескін шығаратын құрылғы (7).</li>
+<li>Қағазға басып шығаратын құрылғы (7).</li>
+<li>Модулятор-демодулятор: компьютерді телефон желісі арқылы желіге қосады (5).</li>
+<li>Мәтін енгізілетін орынды көрсететін жыпылықтайтын белгі (6).</li>
+<li>Экрандағы кескіннің ең кіші нүктесі (7).</li>
+<li>8 битке тең ақпарат бірлігі (4).</li>
+</ol>
+<p><b>Тапсырма:</b></p>
+<ol>
+<li>Жауаптарды әріптеп көгілдір ұяшықтарға жазыңыз.</li>
+<li><code>N2:N8</code> — сөздің әріптерін бір ұяшыққа біріктіріңіз${HF('СЦЕПИТЬ').kz}. 2-жол үшін: <code>=СЦЕПИТЬ(G2;H2;I2;J2)</code>. Әр жолдың өз ұяшықтары бар (созуға болмайды!).</li>
+<li><code>O2:O8</code> — сөз дұрыс болса 1 ұпай, әйтпесе 0${HF('ЕСЛИ').kz}. 2-жол үшін: <code>=ЕСЛИ(N2="ФАЙЛ";1;0)</code></li>
+<li><code>N10</code> — кілт сөз: G бағанының әріптерін біріктіріңіз (<code>G2</code>…<code>G8</code>)${HF('СЦЕПИТЬ').kz}.</li>
+<li><code>O10</code> — кілт сөз «ФОРМУЛА» болса 3 бонус ұпай, әйтпесе 0${HF('ЕСЛИ').kz}.</li>
+<li><code>O12</code> — барлық ұпай${HF('СУММ').kz}: <code>=СУММ(O2:O10)</code></li>
+</ol>
+<p class="note">Тексеріңіз: бір әріпті қате жазыңыз — сөздің ұпайы 0 болуы керек. Онлайн-сөзжұмбақтар осылай жұмыс істейді. Уақыт қалса — бос ұяшықтарда өз сөзжұмбағыңызды ойлап табыңыз!</p>`),
+  checks:[
+    {cells:'N2:N8', p:3, uniform:false, want:[CAT], name:L('слово','сөз'), expect:(V,r,cl,G)=>word(G,r-2)},
+    {cells:'O2:O8', p:3, uniform:false, want:[['IF']], name:L('баллы за слово','сөз ұпайы'), expect:(V,r,cl,G)=>pts(G,r-2)},
+    {cells:'N10', p:1.5, want:[CAT], name:L('ключевое слово','кілт сөз'), expect:(V,r,cl,G)=>keyw(G)},
+    {cells:'O10', p:1, want:[['IF']], name:L('бонус','бонус'), expect:(V,r,cl,G)=>kpts(G)},
+    {cells:'O12', p:1.5, want:[['SUM']], dep:'O2:O8 O10', alt:V=>sumA(rowsI.map(i=>V('O'+(i+2))))+V('O10'), name:L('итого','барлығы'), expect:(V,r,cl,G)=>sumA(rowsI.map(i=>pts(G,i)))+kpts(G)}
+  ],
+  perturb(set){ const AB = 'АБВГДЕИКЛМНОПРСТУФЬЙ';
+    const good = Math.random() < .5;
+    rowsI.forEach(i => { const w = W[i][0], c = cellsOf(i); const ok = good || Math.random() < .6;
+      c.forEach((a, j) => set(a, ok || Math.random() < .7 ? (Math.random() < .5 ? w[j].toLowerCase() : w[j]) : AB[RND.int(0, AB.length - 1)])); }); },
+  sol: rowsI.map(i => ['N' + (i + 2), '=СЦЕПИТЬ(' + cellsOf(i).join(';') + ')'])
+    .concat(rowsI.map(i => ['O' + (i + 2), `=ЕСЛИ(N${i + 2}="${W[i][0]}";1;0)`]))
+    .concat([['N10', '=СЦЕПИТЬ(' + keyCells.join(';') + ')'], ['O10', '=ЕСЛИ(N10="ФОРМУЛА";3;0)'], ['O12', '=СУММ(O2:O10)']])
+});
+}
+
+/* compile tasks: data map + style map */
+TASKS.forEach(tk => {
+  tk.data = {}; tk.style = {};
+  tk.blocks.forEach(([start, rows]) => { const p = P(start); rows.forEach((row, i) => row.forEach((v, j) => { if (v !== null && v !== undefined) tk.data[A(p.c + j, p.r + i)] = v; })); });
+  tk.targets = new Set();
+  tk.checks.forEach(ch => addrs(ch.cells).forEach(a => { tk.style[a] = 't'; tk.targets.add(a); }));
+  const sum = tk.checks.reduce((s, ch) => s + ch.p, 0); if (Math.abs(sum - TASK_MAX) > 1e-9) console.warn('Task ' + tk.id + ': points sum = ' + sum);
+  tk.styles.forEach(([rs, cls]) => addrs(rs).forEach(a => { tk.style[a] = ((tk.style[a] && tk.style[a] !== 't') ? tk.style[a] + ' ' : '') + cls; }));
+});
+
+/* ==================== FORMULA ENGINE ==================== */
+class XErr { constructor(code){ this.code = code; } }
+const ER = {div:'#ДЕЛ/0!', val:'#ЗНАЧ!', name:'#ИМЯ?', ref:'#ССЫЛКА!', na:'#Н/Д', num:'#ЧИСЛО!', cyc:'#ЦИКЛ!'};
+const isErr = v => v instanceof XErr;
+const NOTL = 'A-Z0-9_.А-ЯЁӘҒҚҢӨҰҮҺІ';
+const RX_REF = new RegExp('^(\\$?)([A-Z]{1,2})(\\$?)([0-9]{1,5})(?![' + NOTL + '(])');
+const RX_COLS = new RegExp('^(\\$?)([A-Z]{1,2}):(\\$?)([A-Z]{1,2})(?![' + NOTL + '(])');
+const RX_ID = /^[A-Z_А-ЯЁӘҒҚҢӨҰҮҺІ][A-Z0-9_.А-ЯЁӘҒҚҢӨҰҮҺІ]*/;
+const RXG_REF = () => new RegExp('(^|[^' + NOTL + '$])(\\$?)([A-Z]{1,2})(\\$?)([0-9]{1,5})(?![' + NOTL + '(])', 'g');
+const RXG_COLS = () => new RegExp('(^|[^' + NOTL + '$])(\\$?)([A-Z]{1,2}):(\\$?)([A-Z]{1,2})(?![' + NOTL + '(])', 'g');
+const BOOLS = {TRUE:true, FALSE:false, 'ИСТИНА':true, 'ЛОЖЬ':false};
+const CYR2LAT = {'А':'A','В':'B','С':'C','Е':'E','Н':'H','К':'K','М':'M','Р':'P','Т':'T','Х':'X','О':'O'};
+
+const splitStr = f => f.split(/("(?:[^"]|"")*"?)/);
+function normalizeFormula(f){
+  const re = new RegExp('(^|[^' + NOTL + '$])(\\$?)([A-ZАВСЕНКМРТХО]{1,2})(\\$?)([0-9]{1,5})(?![' + NOTL + '(])', 'g');
+  return splitStr(f).map((seg, i) => i % 2 ? seg : seg.toUpperCase().replace(re, (m, pre, d1, let_, d2, dig) => pre + d1 + let_.replace(/[АВСЕНКМРТХО]/g, ch => CYR2LAT[ch]) + d2 + dig)).join('');
+}
+function mapRefs(f, cellFn, colsFn){
+  return splitStr(f).map((seg, i) => {
+    if (i % 2) return seg;
+    seg = seg.replace(RXG_REF(), (m, pre, ca, cl, ra, rw) => pre + cellFn(!!ca, colIdx(cl), !!ra, +rw - 1));
+    if (colsFn) seg = seg.replace(RXG_COLS(), (m, pre, a1, c1, a2, c2) => pre + colsFn(!!a1, colIdx(c1), !!a2, colIdx(c2)));
+    return seg;
+  }).join('');
+}
+function shiftFormula(f, dr, dc){
+  if (!f || f[0] !== '=') return f;
+  return mapRefs(f,
+    (ca, c, ra, r) => { const nc = ca ? c : c + dc, nr = ra ? r : r + dr; if (nc < 0 || nr < 0) return ER.ref; return (ca ? '$' : '') + colName(nc) + (ra ? '$' : '') + (nr + 1); },
+    (a1, c1, a2, c2) => { const n1 = a1 ? c1 : c1 + dc, n2 = a2 ? c2 : c2 + dc; if (n1 < 0 || n2 < 0) return ER.ref; return (a1 ? '$' : '') + colName(n1) + ':' + (a2 ? '$' : '') + colName(n2); });
+}
+function toR1C1(f, r, c){
+  return mapRefs(f,
+    (ca, cc, ra, rr) => 'R' + (ra ? (rr + 1) : '[' + (rr - r) + ']') + 'C' + (ca ? (cc + 1) : '[' + (cc - c) + ']'),
+    (a1, c1, a2, c2) => 'C' + (a1 ? c1 + 1 : '[' + (c1 - c) + ']') + ':C' + (a2 ? c2 + 1 : '[' + (c2 - c) + ']')
+  ).replace(/\s+/g, '');
+}
+function fixParens(f){ let d = 0; splitStr(f).forEach((s, i) => { if (!(i % 2)) for (const ch of s){ if (ch === '(') d++; else if (ch === ')') d--; } }); return d > 0 ? f + ')'.repeat(d) : f; }
+
+function tokenize(s){
+  const semi = s.replace(/"(?:[^"]|"")*"/g, '').includes(';');
+  const T = []; let i = 0, depth = 0;
+  while (i < s.length){
+    const ch = s[i];
+    if (/\s/.test(ch)){ i++; continue; }
+    if (ch === '"'){ let j = i + 1, str = ''; for (;;){ if (j >= s.length) throw 'str'; if (s[j] === '"'){ if (s[j+1] === '"'){ str += '"'; j += 2; continue; } break; } str += s[j++]; } T.push({t:'s', v:str}); i = j + 1; continue; }
+    if (/[0-9]/.test(ch)){
+      let j = i; while (j < s.length && /[0-9]/.test(s[j])) j++;
+      let ns = s.slice(i, j);
+      if ((s[j] === '.' || (s[j] === ',' && (semi || depth === 0))) && /[0-9]/.test(s[j+1] || '')){ let k = j + 1; while (k < s.length && /[0-9]/.test(s[k])) k++; ns += '.' + s.slice(j + 1, k); j = k; }
+      const ex = /^E[+-]?[0-9]+/.exec(s.slice(j)); if (ex){ ns += ex[0]; j += ex[0].length; }
+      T.push({t:'n', v:parseFloat(ns)}); i = j; continue;
+    }
+    if (ch === '$' || /[A-Z_А-ЯЁӘҒҚҢӨҰҮҺІ]/.test(ch)){
+      const rest = s.slice(i);
+      let m = RX_COLS.exec(rest);
+      if (m){ const c1 = colIdx(m[2]), c2 = colIdx(m[4]); T.push({t:'rng', c1:Math.min(c1,c2), c2:Math.max(c1,c2), r1:0, r2:9999}); i += m[0].length; continue; }
+      m = RX_REF.exec(rest);
+      if (m){
+        let j = i + m[0].length; const c1 = colIdx(m[2]), r1 = +m[4] - 1;
+        if (s[j] === ':'){ const m2 = RX_REF.exec(s.slice(j + 1)); if (m2){ const c2 = colIdx(m2[2]), r2 = +m2[4] - 1; T.push({t:'rng', c1:Math.min(c1,c2), c2:Math.max(c1,c2), r1:Math.min(r1,r2), r2:Math.max(r1,r2)}); i = j + 1 + m2[0].length; continue; } }
+        T.push({t:'ref', c:c1, r:r1}); i = j; continue;
+      }
+      m = RX_ID.exec(rest);
+      if (m){ const j = i + m[0].length; let k = j; while (s[k] === ' ') k++;
+        if (s[k] === '('){ T.push({t:'fn', v:m[0]}); i = k + 1; depth++; continue; }
+        if (m[0] in BOOLS){ T.push({t:'b', v:BOOLS[m[0]]}); i = j; continue; }
+        T.push({t:'name', v:m[0]}); i = j; continue; }
+      throw 'char';
+    }
+    const two = s.substr(i, 2);
+    if (two === '<=' || two === '>=' || two === '<>'){ T.push({t:'op', v:two}); i += 2; continue; }
+    if ('+-*/^&=<>%'.includes(ch)){ T.push({t:'op', v:ch}); i++; continue; }
+    if (ch === '('){ T.push({t:'('}); depth++; i++; continue; }
+    if (ch === ')'){ T.push({t:')'}); depth--; i++; continue; }
+    if (ch === ';' || ch === ','){ T.push({t:'sep'}); i++; continue; }
+    throw 'char';
+  }
+  return T;
+}
+function parse(src){
+  const T = tokenize(src); let p = 0;
+  const isOp = v => T[p] && T[p].t === 'op' && T[p].v === v;
+  const CMP = ['=','<>','<','>','<=','>='];
+  function cmp(){ let a = cat(); while (T[p] && T[p].t === 'op' && CMP.includes(T[p].v)){ const op = T[p++].v; a = {t:'bin', op, a, b:cat()}; } return a; }
+  function cat(){ let a = add(); while (isOp('&')){ p++; a = {t:'bin', op:'&', a, b:add()}; } return a; }
+  function add(){ let a = mul(); while (isOp('+') || isOp('-')){ const op = T[p++].v; a = {t:'bin', op, a, b:mul()}; } return a; }
+  function mul(){ let a = pow(); while (isOp('*') || isOp('/')){ const op = T[p++].v; a = {t:'bin', op, a, b:pow()}; } return a; }
+  function pow(){ let a = una(); while (isOp('^')){ p++; a = {t:'bin', op:'^', a, b:una()}; } return a; }
+  function una(){ if (isOp('-')){ p++; return {t:'neg', a:una()}; } if (isOp('+')){ p++; return una(); } return post(); }
+  function post(){ let a = prim(); while (isOp('%')){ p++; a = {t:'pct', a}; } return a; }
+  function prim(){
+    const k = T[p++]; if (!k) throw 'eof';
+    switch (k.t){
+      case 'n': case 's': case 'b': return {t:k.t, v:k.v};
+      case 'ref': return {t:'ref', c:k.c, r:k.r};
+      case 'rng': return {t:'rng', c1:k.c1, r1:k.r1, c2:k.c2, r2:k.r2};
+      case 'name': return {t:'err', v:ER.name};
+      case 'fn': {
+        const args = [];
+        if (T[p] && T[p].t === ')'){ p++; return {t:'fn', name:k.v, args}; }
+        for (;;){
+          if (T[p] && (T[p].t === 'sep' || T[p].t === ')')) args.push({t:'miss'}); else args.push(cmp());
+          const q = T[p++]; if (!q) throw 'eof'; if (q.t === ')') break; if (q.t !== 'sep') throw 'sep';
+        }
+        return {t:'fn', name:k.v, args};
+      }
+      case '(': { const e = cmp(); const q = T[p++]; if (!q || q.t !== ')') throw ')'; return e; }
+    }
+    throw 'unexpected';
+  }
+  const ast = cmp(); if (p < T.length) throw 'trailing'; return ast;
+}
+const PCACHE = new Map();
+function parseCached(f){ if (PCACHE.has(f)) return PCACHE.get(f); let ast; try { ast = parse(f.slice(1)); } catch (e){ ast = {t:'err', v:ER.name, bad:true}; } PCACHE.set(f, ast); return ast; }
+function tryParse(f){ try { parse(f.slice(1)); return true; } catch (e){ return false; } }
+
+function parseNum(s){
+  if (typeof s !== 'string') return null; const t = s.trim();
+  const m = /^([+-]?)(\d+(?:[.,]\d*)?|[.,]\d+)(?:[eE]([+-]?\d+))?(%?)$/.exec(t);
+  if (!m) return null; let v = parseFloat((m[1] + m[2]).replace(',', '.') + (m[3] ? 'e' + m[3] : ''));
+  if (m[4]) v /= 100; return v;
+}
+function parseLiteral(s){
+  if (s === '') return null; if (s[0] === "'") return s.slice(1);
+  const n = parseNum(s); if (n !== null) return n;
+  const u = s.trim().toUpperCase(); if (u in BOOLS) return BOOLS[u];
+  return s;
+}
+function fmtNum(v){
+  if (!isFinite(v)) return ER.num; if (Object.is(v, -0)) v = 0;
+  const a = Math.abs(v); let s;
+  if (a !== 0 && (a >= 1e11 || a < 1e-9)) s = v.toExponential(5).replace(/\.?0+e/, 'e').replace('e', 'E');
+  else s = String(Number(v.toPrecision(11)));
+  return s.replace('.', ',');
+}
+
+function num(v){
+  if (isErr(v)) throw v;
+  if (v === null || v === undefined || v === '') return 0;
+  if (typeof v === 'number') return v;
+  if (typeof v === 'boolean') return v ? 1 : 0;
+  const x = parseNum(v); if (x === null) throw new XErr(ER.val); return x;
+}
+function str(v){ if (isErr(v)) throw v; if (v === null || v === undefined) return ''; if (typeof v === 'boolean') return v ? 'ИСТИНА' : 'ЛОЖЬ'; if (typeof v === 'number') return fmtNum(v); return v; }
+function bool(v){
+  if (isErr(v)) throw v; if (v === null || v === undefined) return false;
+  if (typeof v === 'boolean') return v; if (typeof v === 'number') return v !== 0;
+  const u = v.toUpperCase(); if (u in BOOLS) return BOOLS[u]; throw new XErr(ER.val);
+}
+function cmpVals(a, b){
+  if (a === null || a === undefined) a = typeof b === 'string' ? '' : typeof b === 'boolean' ? false : 0;
+  if (b === null || b === undefined) b = typeof a === 'string' ? '' : typeof a === 'boolean' ? false : 0;
+  const rk = v => typeof v === 'number' ? 0 : typeof v === 'string' ? 1 : 2;
+  if (rk(a) !== rk(b)) return rk(a) - rk(b);
+  if (typeof a === 'string'){ const x = a.toUpperCase(), y = b.toUpperCase(); return x < y ? -1 : x > y ? 1 : 0; }
+  if (typeof a === 'boolean') return (a ? 1 : 0) - (b ? 1 : 0);
+  const d = a - b; return Math.abs(d) < 1e-12 ? 0 : d;
+}
+const cmpOp = (op, d) => op === '=' ? d === 0 : op === '<>' ? d !== 0 : op === '<' ? d < 0 : op === '>' ? d > 0 : op === '<=' ? d <= 0 : d >= 0;
+function mkCrit(cv){
+  if (isErr(cv)) throw cv;
+  if (typeof cv === 'number') return v => typeof v === 'number' ? Math.abs(v - cv) < 1e-12 : (typeof v === 'string' && parseNum(v) === cv);
+  if (typeof cv === 'boolean') return v => v === cv;
+  const s = cv == null ? '' : String(cv);
+  const m = /^(<=|>=|<>|<|>|=)?([\s\S]*)$/.exec(s); const op = m[1] || '='; const rest = m[2];
+  const n = rest.trim() === '' ? null : parseNum(rest);
+  if (n !== null) return v => { const x = typeof v === 'number' ? v : (op === '=' && typeof v === 'string' ? parseNum(v) : null); if (x === null) return op === '<>'; return cmpOp(op, Math.abs(x - n) < 1e-12 ? 0 : x - n); };
+  if (rest === '') return op === '<>' ? v => !(v === null || v === '') : op === '=' ? v => v === null || v === '' : () => false;
+  const U = rest.toUpperCase();
+  const re = /[*?]/.test(rest) ? new RegExp('^' + U.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '[\\s\\S]*').replace(/\?/g, '[\\s\\S]') + '$') : null;
+  const eq = v => typeof v === 'string' && (re ? re.test(v.toUpperCase()) : v.toUpperCase() === U);
+  if (op === '=') return eq; if (op === '<>') return v => !eq(v);
+  return v => typeof v === 'string' && cmpOp(op, cmpVals(v, rest));
+}
+
+function ev(n, X){
+  switch (n.t){
+    case 'n': case 's': case 'b': return n.v;
+    case 'miss': return null;
+    case 'err': throw new XErr(n.v);
+    case 'ref': return X.get(A(n.c, n.r));
+    case 'rng': return {rng:true, c1:n.c1, r1:n.r1, c2:Math.min(n.c2, X.cols - 1), r2:Math.min(n.r2, X.rows - 1)};
+    case 'neg': return -num(sc(n.a, X));
+    case 'pct': return num(sc(n.a, X))/100;
+    case 'bin': return binop(n.op, sc(n.a, X), sc(n.b, X));
+    case 'fn': { const nm = ALIAS[n.name] || n.name; const f = FN[nm]; if (!f) throw new XErr(ER.name); return f(n.args, X); }
+  }
+  throw new XErr(ER.val);
+}
+function sc(n, X){
+  let v = ev(n, X);
+  if (v && v.rng){ if (v.c1 === v.c2 && v.r1 === v.r2) v = X.get(A(v.c1, v.r1)); else throw new XErr(ER.val); }
+  if (isErr(v)) throw v; return v;
+}
+function binop(op, a, b){
+  switch (op){
+    case '+': return num(a) + num(b);
+    case '-': return num(a) - num(b);
+    case '*': return num(a) * num(b);
+    case '/': { const d = num(b); if (d === 0) throw new XErr(ER.div); return num(a)/d; }
+    case '^': { const x = num(a), y = num(b); if (x === 0 && y === 0) throw new XErr(ER.num); const r = Math.pow(x, y); if (!isFinite(r) || isNaN(r)) throw new XErr(ER.num); return r; }
+    case '&': return str(a) + str(b);
+    default: return cmpOp(op, cmpVals(a, b));
+  }
+}
+function getRange(n, X){
+  if (n.t === 'ref') return {c1:n.c, r1:n.r, c2:n.c, r2:n.r};
+  if (n.t === 'rng') { const v = ev(n, X); return v; }
+  throw new XErr(ER.val);
+}
+function forRange(rg, X, cb){ for (let r = rg.r1; r <= rg.r2; r++) for (let c = rg.c1; c <= rg.c2; c++) cb(X.get(A(c, r)), r - rg.r1, c - rg.c1); }
+function rangeVals(rg, X){ const o = []; forRange(rg, X, v => o.push(v)); return o; }
+function each(args, X, cb){
+  for (const a of args){
+    if (a.t === 'miss') continue;
+    const v = ev(a, X);
+    if (v && v.rng) forRange(v, X, x => cb(x, true));
+    else cb(v, a.t === 'ref');
+  }
+}
+function aggNums(args, X){ const o = []; each(args, X, (v, fromRef) => { if (isErr(v)) throw v; if (fromRef){ if (typeof v === 'number') o.push(v); } else if (v !== null) o.push(num(v)); }); return o; }
+const need = (args, n) => { if (args.length < n || args.slice(0, n).some(a => a.t === 'miss')) throw new XErr(ER.val); };
+const arg = (args, i, X, def) => (args[i] && args[i].t !== 'miss') ? sc(args[i], X) : def;
+
+const FN = {
+  SUM: (a, X) => aggNums(a, X).reduce((s, x) => s + x, 0),
+  AVERAGE: (a, X) => { const n = aggNums(a, X); if (!n.length) throw new XErr(ER.div); return n.reduce((s, x) => s + x, 0)/n.length; },
+  MAX: (a, X) => { const n = aggNums(a, X); return n.length ? Math.max(...n) : 0; },
+  MIN: (a, X) => { const n = aggNums(a, X); return n.length ? Math.min(...n) : 0; },
+  PRODUCT: (a, X) => { const n = aggNums(a, X); return n.length ? n.reduce((s, x) => s*x, 1) : 0; },
+  MEDIAN: (a, X) => { const n = aggNums(a, X).sort((x, y) => x - y); if (!n.length) throw new XErr(ER.num); const m = n.length >> 1; return n.length % 2 ? n[m] : (n[m-1] + n[m])/2; },
+  COUNT: (a, X) => { let k = 0; each(a, X, (v, fr) => { if (typeof v === 'number') k++; else if (!fr && v !== null && !isErr(v) && (typeof v === 'boolean' || parseNum(v) !== null)) k++; }); return k; },
+  COUNTA: (a, X) => { let k = 0; each(a, X, v => { if (v !== null && v !== '') k++; }); return k; },
+  COUNTBLANK: (a, X) => { need(a, 1); let k = 0; forRange(getRange(a[0], X), X, v => { if (v === null || v === '') k++; }); return k; },
+  COUNTIF: (a, X) => { need(a, 2); const rg = getRange(a[0], X), f = mkCrit(sc(a[1], X)); let k = 0; forRange(rg, X, v => { if (!isErr(v) && f(v)) k++; }); return k; },
+  COUNTIFS: (a, X) => {
+    need(a, 2); const pairs = []; for (let i = 0; i + 1 < a.length; i += 2) pairs.push([getRange(a[i], X), mkCrit(sc(a[i+1], X))]);
+    const R0 = pairs[0][0]; let k = 0;
+    for (let i = 0; i <= R0.r2 - R0.r1; i++) for (let j = 0; j <= R0.c2 - R0.c1; j++) if (pairs.every(([rg, f]) => { const v = X.get(A(rg.c1 + j, rg.r1 + i)); return !isErr(v) && f(v); })) k++;
+    return k;
+  },
+  SUMIF: (a, X) => {
+    need(a, 2); const rg = getRange(a[0], X), f = mkCrit(sc(a[1], X)); const sr = (a[2] && a[2].t !== 'miss') ? getRange(a[2], X) : rg; let s = 0;
+    forRange(rg, X, (v, i, j) => { if (!isErr(v) && f(v)){ const x = X.get(A(sr.c1 + j, sr.r1 + i)); if (isErr(x)) throw x; if (typeof x === 'number') s += x; } });
+    return s;
+  },
+  AVERAGEIF: (a, X) => {
+    need(a, 2); const rg = getRange(a[0], X), f = mkCrit(sc(a[1], X)); const sr = (a[2] && a[2].t !== 'miss') ? getRange(a[2], X) : rg; let s = 0, k = 0;
+    forRange(rg, X, (v, i, j) => { if (!isErr(v) && f(v)){ const x = X.get(A(sr.c1 + j, sr.r1 + i)); if (typeof x === 'number'){ s += x; k++; } } });
+    if (!k) throw new XErr(ER.div); return s/k;
+  },
+  SUMIFS: (a, X) => {
+    need(a, 3); const sr = getRange(a[0], X); const pairs = []; for (let i = 1; i + 1 < a.length; i += 2) pairs.push([getRange(a[i], X), mkCrit(sc(a[i+1], X))]);
+    let s = 0;
+    for (let i = 0; i <= sr.r2 - sr.r1; i++) for (let j = 0; j <= sr.c2 - sr.c1; j++) if (pairs.every(([rg, f]) => { const v = X.get(A(rg.c1 + j, rg.r1 + i)); return !isErr(v) && f(v); })){ const x = X.get(A(sr.c1 + j, sr.r1 + i)); if (typeof x === 'number') s += x; }
+    return s;
+  },
+  IF: (a, X) => { need(a, 1); const c = bool(sc(a[0], X)); if (c) return a.length > 1 ? (a[1].t === 'miss' ? 0 : sc(a[1], X)) : true; return a.length > 2 ? (a[2].t === 'miss' ? 0 : sc(a[2], X)) : false; },
+  AND: (a, X) => { need(a, 1); let r = true; each(a, X, (v, fr) => { if (isErr(v)) throw v; if (fr && (v === null || typeof v === 'string')) return; if (!bool(v)) r = false; }); return r; },
+  OR: (a, X) => { need(a, 1); let r = false; each(a, X, (v, fr) => { if (isErr(v)) throw v; if (fr && (v === null || typeof v === 'string')) return; if (bool(v)) r = true; }); return r; },
+  NOT: (a, X) => { need(a, 1); return !bool(sc(a[0], X)); },
+  IFERROR: (a, X) => { need(a, 1); try { return sc(a[0], X); } catch (e){ if (isErr(e)) return arg(a, 1, X, 0); throw e; } },
+  ROUND: (a, X) => { need(a, 2); return rnd(num(sc(a[0], X)), Math.trunc(num(sc(a[1], X)))); },
+  ROUNDUP: (a, X) => { need(a, 2); return rndUp(num(sc(a[0], X)), Math.trunc(num(sc(a[1], X)))); },
+  ROUNDDOWN: (a, X) => { need(a, 2); return rndDown(num(sc(a[0], X)), Math.trunc(num(sc(a[1], X)))); },
+  TRUNC: (a, X) => { need(a, 1); return rndDown(num(sc(a[0], X)), Math.trunc(num(arg(a, 1, X, 0)))); },
+  INT: (a, X) => { need(a, 1); return Math.floor(num(sc(a[0], X))); },
+  POWER: (a, X) => { need(a, 2); return binop('^', sc(a[0], X), sc(a[1], X)); },
+  SQRT: (a, X) => { need(a, 1); const x = num(sc(a[0], X)); if (x < 0) throw new XErr(ER.num); return Math.sqrt(x); },
+  ABS: (a, X) => { need(a, 1); return Math.abs(num(sc(a[0], X))); },
+  MOD: (a, X) => { need(a, 2); const x = num(sc(a[0], X)), d = num(sc(a[1], X)); if (d === 0) throw new XErr(ER.div); return Number((x - d*Math.floor(x/d)).toPrecision(15)); },
+  PI: () => Math.PI,
+  TRUE: () => true, FALSE: () => false,
+  RANK: (a, X) => { need(a, 2); const x = num(sc(a[0], X)); const vals = rangeVals(getRange(a[1], X), X).filter(v => typeof v === 'number'); if (!vals.some(v => Math.abs(v - x) < 1e-12)) throw new XErr(ER.na); const asc = num(arg(a, 2, X, 0)) !== 0; return 1 + vals.filter(v => asc ? v < x : v > x).length; },
+  LARGE: (a, X) => { need(a, 2); const vals = rangeVals(getRange(a[0], X), X).filter(v => typeof v === 'number').sort((p, q) => q - p); const k = Math.ceil(num(sc(a[1], X))); if (k < 1 || k > vals.length) throw new XErr(ER.num); return vals[k-1]; },
+  SMALL: (a, X) => { need(a, 2); const vals = rangeVals(getRange(a[0], X), X).filter(v => typeof v === 'number').sort((p, q) => p - q); const k = Math.ceil(num(sc(a[1], X))); if (k < 1 || k > vals.length) throw new XErr(ER.num); return vals[k-1]; },
+  VLOOKUP: (a, X) => {
+    need(a, 3); const v = sc(a[0], X), rg = getRange(a[1], X), k = Math.trunc(num(sc(a[2], X)));
+    if (k < 1) throw new XErr(ER.val); if (k > rg.c2 - rg.c1 + 1) throw new XErr(ER.ref);
+    const approx = bool(arg(a, 3, X, true)); let row = -1;
+    for (let r = rg.r1; r <= rg.r2; r++){ const x = X.get(A(rg.c1, r)); if (x === null) continue; const d = cmpVals(x, v); if (!approx){ if (d === 0){ row = r; break; } } else { if (d <= 0) row = r; else break; } }
+    if (row < 0) throw new XErr(ER.na); const res = X.get(A(rg.c1 + k - 1, row)); if (isErr(res)) throw res; return res === null ? 0 : res;
+  },
+  CONCATENATE: (a, X) => a.map(n => str(sc(n, X))).join(''),
+  MATCH: (a, X) => {
+    need(a, 2); const v = sc(a[0], X), vals = rangeVals(getRange(a[1], X), X), type = Math.sign(num(arg(a, 2, X, 1)));
+    if (type === 0){ const f = mkCrit(v); for (let i = 0; i < vals.length; i++) if (!isErr(vals[i]) && vals[i] !== null && f(vals[i])) return i + 1; throw new XErr(ER.na); }
+    let best = -1; for (let i = 0; i < vals.length; i++){ const x = vals[i]; if (x === null || isErr(x)) continue; const d = cmpVals(x, v); if (type > 0 ? d <= 0 : d >= 0) best = i; else break; }
+    if (best < 0) throw new XErr(ER.na); return best + 1;
+  },
+  INDEX: (a, X) => {
+    need(a, 2); const rg = getRange(a[0], X); let r = Math.trunc(num(sc(a[1], X))), c = Math.trunc(num(arg(a, 2, X, 1)));
+    if (rg.r1 === rg.r2 && !(a[2] && a[2].t !== 'miss')){ c = r; r = 1; }
+    if (r < 1 || c < 1 || r > rg.r2 - rg.r1 + 1 || c > rg.c2 - rg.c1 + 1) throw new XErr(ER.ref);
+    const res = X.get(A(rg.c1 + c - 1, rg.r1 + r - 1)); if (isErr(res)) throw res; return res === null ? 0 : res;
+  }
+};
+const ALIAS = {
+  'СУММ':'SUM','СРЗНАЧ':'AVERAGE','МАКС':'MAX','МИН':'MIN','ПРОИЗВЕД':'PRODUCT','МЕДИАНА':'MEDIAN',
+  'СЧЁТ':'COUNT','СЧЕТ':'COUNT','СЧЁТЗ':'COUNTA','СЧЕТЗ':'COUNTA','СЧИТАТЬПУСТОТЫ':'COUNTBLANK',
+  'СЧЁТЕСЛИ':'COUNTIF','СЧЕТЕСЛИ':'COUNTIF','СЧЁТЕСЛИМН':'COUNTIFS','СЧЕТЕСЛИМН':'COUNTIFS',
+  'СУММЕСЛИ':'SUMIF','СУММЕСЛИМН':'SUMIFS','СРЗНАЧЕСЛИ':'AVERAGEIF',
+  'ЕСЛИ':'IF','И':'AND','ИЛИ':'OR','НЕ':'NOT','ЕСЛИОШИБКА':'IFERROR',
+  'ОКРУГЛ':'ROUND','ОКРУГЛВВЕРХ':'ROUNDUP','ОКРУГЛВНИЗ':'ROUNDDOWN','ОТБР':'TRUNC','ЦЕЛОЕ':'INT',
+  'СТЕПЕНЬ':'POWER','КОРЕНЬ':'SQRT','ОСТАТ':'MOD','ПИ':'PI','ИСТИНА':'TRUE','ЛОЖЬ':'FALSE',
+  'РАНГ':'RANK','РАНГ.РВ':'RANK','RANK.EQ':'RANK','НАИБОЛЬШИЙ':'LARGE','НАИМЕНЬШИЙ':'SMALL',
+  'ВПР':'VLOOKUP','СЦЕПИТЬ':'CONCATENATE','ПОИСКПОЗ':'MATCH','ИНДЕКС':'INDEX'
+};
+/* canonical name -> Russian name (for the teacher rubric) */
+const RU_NAME = {'^':'^'}; Object.keys(ALIAS).forEach(k => { if (!RU_NAME[ALIAS[k]]) RU_NAME[ALIAS[k]] = k; });
+
+function evalFormula(f, X){
+  const ast = parseCached(f);
+  try {
+    let v = ev(ast, X);
+    if (v && v.rng){ if (v.c1 === v.c2 && v.r1 === v.r2) v = X.get(A(v.c1, v.r1)); else return new XErr(ER.val); }
+    if (v === null || v === undefined) return 0;
+    if (typeof v === 'number' && (!isFinite(v) || isNaN(v))) return new XErr(ER.num);
+    return v;
+  } catch (e){ if (isErr(e)) return e; if (e instanceof RangeError) return new XErr(ER.cyc); throw e; }
+}
+
+/* evaluation context for one sheet; override = {addr:value} (used by checker) */
+function makeCtx(si, override){
+  const tk = TASKS[si], st = S.sheets[si], memo = new Map(), stack = new Set();
+  const X = {rows:tk.rows, cols:tk.cols, get};
+  function get(a){
+    if (memo.has(a)) return memo.get(a);
+    if (stack.has(a)) return new XErr(ER.cyc);
+    stack.add(a); let v;
+    if (override && Object.prototype.hasOwnProperty.call(override, a)) v = override[a];
+    else if (Object.prototype.hasOwnProperty.call(st.cells, a)){ const s = st.cells[a]; v = (s.length > 1 && s[0] === '=') ? evalFormula(s, X) : parseLiteral(s); }
+    else { const d = tk.data[a]; v = d === undefined ? null : tr(d); }
+    stack.delete(a); memo.set(a, v); return v;
+  }
+  return X;
+}
+
+/* ==================== CHECKER ==================== */
+function matchVal(got, e, tol){
+  if (typeof e === 'string' && e[0] === '@'){
+    return isLab(got, e.slice(1));
+  }
+  if (typeof e === 'number'){
+    if (typeof got !== 'number') return false;
+    const tl = tol != null ? tol : 1e-6*Math.max(1, Math.abs(e));
+    return Math.abs(got - e) <= tl;
+  }
+  return got === e;
+}
+/* depOk: the student filled the earlier answer cells this item builds on — then an answer computed
+   correctly from the student's own (possibly wrong) earlier values also counts (error carried forward) */
+function cellOk(ch, X, a, depOk){
+  try {
+    const p = P(a); const V = ad => num(X.get(ad)); const G = ad => X.get(ad);
+    let exp = [].concat(ch.expect(V, p.r + 1, colName(p.c), G));
+    if (depOk && ch.alt){ try { exp = exp.concat(ch.alt(V, p.r + 1, colName(p.c), G)); } catch (e){} }
+    const got = X.get(a); if (isErr(got)) return false;
+    return (Array.isArray(exp) ? exp : [exp]).some(e => matchVal(got, e, ch.tol));
+  } catch (e){ return false; }
+}
+function runChecks(si){
+  const tk = TASKS[si], st = S.sheets[si];
+  const base = makeCtx(si, null);
+  const trials = [];
+  for (let k = 0; k < CONFIG.TRIALS; k++){ const ov = {}; tk.perturb((a, v) => { ov[a] = v; }); trials.push(makeCtx(si, ov)); }
+  const items = tk.checks.map(ch => {
+    const list = addrs(ch.cells); const empty = [], nof = [];
+    list.forEach(a => { const raw = st.cells[a]; if (raw === undefined || raw === '') empty.push(a); else if (raw[0] !== '=' || raw.length < 2) nof.push(a); });
+    if (empty.length) return {status:'empty', bad:empty.length === list.length ? [] : empty};
+    if (nof.length) return {status:'noformula', bad:nof};
+    if (ch.kind === 'same'){
+      const p0 = P(list[0]); const ref = toR1C1(st.cells[list[0]], p0.r, p0.c);
+      const bad = list.filter(a => { const p = P(a); return toR1C1(st.cells[a], p.r, p.c) !== ref; });
+      return bad.length ? {status:'samefail', bad} : {status:'ok', bad:[]};
+    }
+    const depOk = !!ch.dep && ch.dep.split(' ').every(rs => addrs(rs).every(a => { const raw = st.cells[a]; return raw !== undefined && raw.length > 1 && raw[0] === '='; }));
+    const wrong = list.filter(a => !cellOk(ch, base, a, depOk));
+    if (wrong.length) return {status:'wrong', bad:wrong};
+    for (const X of trials){ const w = list.filter(a => !cellOk(ch, X, a, depOk)); if (w.length) return {status:'fragile', bad:w}; }
+    return {status:'ok', bad:[]};
+  });
+  // quality of a correct answer: needed functions + one formula filled down the range
+  items.forEach((it, i) => {
+    const ch = tk.checks[i]; it.q = []; it.qbad = []; it.max = ch.p;
+    if (it.status === 'ok' && ch.kind !== 'same'){
+      const list = addrs(ch.cells);
+      if (ch.want){ const nb = list.filter(a => { const f = feats(si, a); return !ch.want.every(g => g.some(x => f.has(x))); }); if (nb.length){ it.q.push('func'); it.qbad.push(...nb); } }
+      if (ch.uniform !== false && list.length >= 3){
+        const r1 = a => { const p = P(a); return toR1C1(st.cells[a], p.r, p.c); }; const ref = r1(list[1]);
+        const nb = list.slice(2).filter(a => r1(a) !== ref); if (nb.length){ it.q.push('uniform'); it.qbad.push(...nb); }
+      }
+    }
+    it.pts = it.status === 'ok' ? (it.q.length ? ch.p/2 : ch.p) : 0;
+  });
+  const pts = Math.round(items.reduce((s, i) => s + i.pts, 0)*100)/100;
+  return {items, pts, total:TASK_MAX, t:Date.now()};
+}
+/* functions and operators used by a formula, following helper cells the student made outside the answer cells */
+function feats(si, start){
+  const tk = TASKS[si], cells = S.sheets[si].cells, out = new Set(), seen = new Set();
+  (function walk(a){
+    if (seen.has(a)) return; seen.add(a);
+    const raw = cells[a]; if (!raw || raw[0] !== '=') return;
+    const refs = [];
+    (function v(n){
+      if (!n) return;
+      if (n.t === 'fn'){ out.add(ALIAS[n.name] || n.name); n.args.forEach(v); }
+      else if (n.t === 'bin'){ if (n.op === '^' || n.op === '&') out.add(n.op); v(n.a); v(n.b); }
+      else if (n.t === 'neg' || n.t === 'pct') v(n.a);
+      else if (n.t === 'ref') refs.push(A(n.c, n.r));
+      else if (n.t === 'rng'){ const r2 = Math.min(n.r2, tk.rows - 1), c2 = Math.min(n.c2, tk.cols - 1); for (let r = n.r1; r <= r2; r++) for (let c = n.c1; c <= c2; c++) refs.push(A(c, r)); }
+    })(parseCached(raw));
+    refs.forEach(r => { if (!tk.targets.has(r)) walk(r); });
+  })(start);
+  return out;
+}
+const fmtPts = x => String(Math.round(x*100)/100).replace('.', ',');
+
+/* ==================== STATE ==================== */
+function fresh(){ return {v:1, lang:(S0 && S0.lang) || 'ru', student:null, started:false, finished:false, startTime:0, endTime:0, cur:0,
+  sheets:TASKS.map(() => ({cells:{}, result:null, bad:[], checks:0})), violations:[], freeUntil:CONFIG.MAX_FREE_RESUMES, locked:false, lockReason:null}; }
+let S0 = null;
+function load(){ try { const s = JSON.parse(localStorage.getItem(LS_KEY)); if (s && s.v === 1 && s.sheets && s.sheets.length === TASKS.length) return s; } catch (e){} return null; }
+function save(){ try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch (e){} }
+let S = load() || fresh();
+
+function t(k){ const d = UI[S.lang] || UI.ru; return d[k] !== undefined ? d[k] : (UI.ru[k] !== undefined ? UI.ru[k] : k); }
+function tr(x){ if (x && typeof x === 'object' && 'ru' in x) return x[S.lang] !== undefined ? x[S.lang] : x.ru; return x; }
+
+/* ==================== GRID UI ==================== */
+let TD = [], CH = [], RH = [], VALS = [];
+let sel = {ar:1, ac:0, fr:1, fc:0};
+const SELS = TASKS.map(tk => { const p = P(addrs(tk.checks[0].cells)[0]); return {ar:p.r, ac:p.c, fr:p.r, fc:p.c}; });
+let ed = null, pointRange = null, drag = null, clip = null, rangeMode = false, rangeAnchorSet = false;
+const UNDO = TASKS.map(() => []), REDO = TASKS.map(() => []);
+const cur = () => TASKS[S.cur];
+const st = () => S.sheets[S.cur];
+const activeAddr = () => A(sel.ac, sel.ar);
+const hasStatic = a => cur().data[a] !== undefined;
+function rawStatic(a){ const d = cur().data[a]; if (d === undefined) return ''; const v = tr(d); return typeof v === 'number' ? fmtNum(v) : typeof v === 'boolean' ? (v ? 'ИСТИНА' : 'ЛОЖЬ') : String(v); }
+function getRaw(a){ const c = st().cells; return Object.prototype.hasOwnProperty.call(c, a) ? c[a] : rawStatic(a); }
+function rng(){ return {r1:Math.min(sel.ar, sel.fr), r2:Math.max(sel.ar, sel.fr), c1:Math.min(sel.ac, sel.fc), c2:Math.max(sel.ac, sel.fc)}; }
+
+function buildGrid(){
+  const tk = cur(); const g = $('grid');
+  let h = '<colgroup><col style="width:42px">', w = 42;
+  for (let c = 0; c < tk.cols; c++){ const cw = (tk.widths && tk.widths[colName(c)]) || 80; w += cw; h += `<col style="width:${cw}px">`; }
+  h += '</colgroup><thead><tr><th class="corner"></th>';
+  for (let c = 0; c < tk.cols; c++) h += `<th class="ch" data-c="${c}">${colName(c)}</th>`;
+  h += '</tr></thead><tbody>';
+  for (let r = 0; r < tk.rows; r++){ h += `<tr><th class="rh" data-r="${r}">${r + 1}</th>`; for (let c = 0; c < tk.cols; c++) h += `<td data-r="${r}" data-c="${c}"></td>`; h += '</tr>'; }
+  g.innerHTML = h + '</tbody>'; g.style.width = w + 'px';
+  TD = []; g.querySelectorAll('tbody tr').forEach((tr_, r) => { TD[r] = Array.from(tr_.querySelectorAll('td')); });
+  CH = Array.from(g.querySelectorAll('th.ch')); RH = Array.from(g.querySelectorAll('th.rh'));
+}
+function refresh(){
+  const tk = cur(), X = makeCtx(S.cur, null), bad = new Set(st().bad || []), R = rng();
+  VALS = [];
+  for (let r = 0; r < tk.rows; r++){ VALS[r] = [];
+    for (let c = 0; c < tk.cols; c++){
+      const a = A(c, r), v = X.get(a); VALS[r][c] = v; const td = TD[r][c];
+      let cls = tk.style[a] || '', txt;
+      if (v === null || v === undefined) txt = '';
+      else if (isErr(v)){ txt = v.code; cls += ' err'; }
+      else if (typeof v === 'number'){ txt = fmtNum(v); if (!/\bc\b/.test(cls)) cls += ' num'; }
+      else if (typeof v === 'boolean'){ txt = v ? 'ИСТИНА' : 'ЛОЖЬ'; cls += ' c'; }
+      else txt = String(v);
+      if (bad.has(a)) cls += ' bad';
+      if (r >= R.r1 && r <= R.r2 && c >= R.c1 && c <= R.c2 && !(r === sel.ar && c === sel.ac)) cls += ' insel';
+      td.className = cls.trim(); if (td.textContent !== txt) td.textContent = txt;
+    } }
+  drawSel();
+}
+function boxRect(r1, c1, r2, c2){
+  const ir = $('gridInner').getBoundingClientRect(); const a = TD[r1][c1].getBoundingClientRect(), b = TD[r2][c2].getBoundingClientRect();
+  return {l:a.left - ir.left, t:a.top - ir.top, w:b.right - a.left, h:b.bottom - a.top};
+}
+function place(el, R){ const b = boxRect(R.r1, R.c1, R.r2, R.c2); el.style.left = b.l + 'px'; el.style.top = b.t + 'px'; el.style.width = (b.w + 1) + 'px'; el.style.height = (b.h + 1) + 'px'; }
+function drawSel(){
+  if (!TD.length) return;
+  const R = rng(), tk = cur();
+  for (let r = 0; r < tk.rows; r++) for (let c = 0; c < tk.cols; c++) TD[r][c].classList.toggle('insel', r >= R.r1 && r <= R.r2 && c >= R.c1 && c <= R.c2 && !(r === sel.ar && c === sel.ac));
+  CH.forEach((th, c) => th.classList.toggle('hs', c >= R.c1 && c <= R.c2));
+  RH.forEach((th, r) => th.classList.toggle('hs', r >= R.r1 && r <= R.r2));
+  place($('selBox'), R);
+  const fh = $('fillHandle');
+  if (ed || S.finished) fh.hidden = true; else { fh.hidden = false; const b = boxRect(R.r2, R.c2, R.r2, R.c2); fh.style.left = (b.l + b.w - 5) + 'px'; fh.style.top = (b.t + b.h - 5) + 'px'; }
+  if (document.activeElement !== $('nameBox')) $('nameBox').value = activeAddr();
+  if (!ed) $('fx').value = getRaw(activeAddr());
+  if (clip && clip.si === S.cur){ $('copyBox').hidden = false; place($('copyBox'), clip); } else $('copyBox').hidden = true;
+  if (ed) placeEditor();
+  // status bar stats
+  let n = 0, cnt = 0, s = 0;
+  if (R.r1 !== R.r2 || R.c1 !== R.c2){ for (let r = R.r1; r <= R.r2; r++) for (let c = R.c1; c <= R.c2; c++){ const v = VALS[r] && VALS[r][c]; if (v !== null && v !== undefined && v !== ''){ cnt++; if (typeof v === 'number'){ n++; s += v; } } } }
+  $('stats').innerHTML = cnt ? (n ? `<span>${t('avg')}: <b>${fmtNum(s/n)}</b></span>` : '') + `<span>${t('count')}: <b>${cnt}</b></span>` + (n ? `<span>${t('sum')}: <b>${fmtNum(s)}</b></span>` : '') : '';
+  setMode();
+}
+function setMode(){ $('mode').textContent = t(!ed ? 'modeReady' : (pointRange && ed.input.value === pointRange.text) ? 'modePoint' : ed.mode === 'enter' ? 'modeEnter' : 'modeEdit'); }
+function scrollToCell(r, c){
+  const w = $('gridWrap'), td = TD[r][c]; const wr = w.getBoundingClientRect(), tr_ = td.getBoundingClientRect();
+  const top = wr.top + (CH[0] ? CH[0].offsetHeight : 24), left = wr.left + 42;
+  if (tr_.top < top) w.scrollTop -= top - tr_.top; else if (tr_.bottom > wr.bottom - 14) w.scrollTop += tr_.bottom - wr.bottom + 14;
+  if (tr_.left < left) w.scrollLeft -= left - tr_.left; else if (tr_.right > wr.right - 14) w.scrollLeft += tr_.right - wr.right + 14;
+}
+function move(dr, dc, ext){
+  const tk = cur();
+  if (ext){ sel.fr = clamp(sel.fr + dr, 0, tk.rows - 1); sel.fc = clamp(sel.fc + dc, 0, tk.cols - 1); scrollToCell(sel.fr, sel.fc); }
+  else { const r = clamp(sel.ar + dr, 0, tk.rows - 1), c = clamp(sel.ac + dc, 0, tk.cols - 1); sel = {ar:r, ac:c, fr:r, fc:c}; scrollToCell(r, c); }
+  drawSel();
+}
+function canEdit(){ return S.started && !S.finished && !S.locked; }
+
+/* ---------- editing ---------- */
+const measureCtx = document.createElement('canvas').getContext('2d');
+function placeEditor(){
+  const ce = $('cellEd'); const b = boxRect(ed.r, ed.c, ed.r, ed.c);
+  ce.style.left = b.l + 'px'; ce.style.top = b.t + 'px'; ce.style.height = (b.h + 1) + 'px';
+  measureCtx.font = '13.5px Calibri, "Segoe UI", Arial';
+  ce.style.width = Math.max(b.w + 1, measureCtx.measureText(ce.value).width + 18) + 'px';
+}
+function startEdit(mode, text, viaFx){
+  if (!canEdit()) return;
+  const a = activeAddr();
+  ed = {r:sel.ar, c:sel.ac, a, mode, input: viaFx ? $('fx') : $('cellEd')};
+  const ce = $('cellEd'); ce.value = text; $('fx').value = text; ce.hidden = false; placeEditor();
+  if (!viaFx){ ce.focus({preventScroll:true}); try { ce.setSelectionRange(text.length, text.length); } catch (e){} }
+  pointRange = null; updRefBoxes(); drawSel();
+}
+function syncFrom(src){ const other = src === $('fx') ? $('cellEd') : $('fx'); other.value = src.value; }
+function afterInput(){ pointRange = null; placeEditor(); updRefBoxes(); setMode(); }
+function endEdit(){
+  ed = null; pointRange = null; $('cellEd').hidden = true; $('refBoxes').innerHTML = '';
+  const ae = document.activeElement; if (ae === $('cellEd') || ae === $('fx')) ae.blur();
+  drawSel(); focusSink();
+}
+/* hidden keyboard receiver: catches typing (incl. IME / text insertion) while no cell is being edited */
+let useSink = true;
+function focusSink(){ if (useSink && canEdit() && !ed && $('modal').hidden && !$('work').hidden) $('sink').focus({preventScroll:true}); }
+$('sink').addEventListener('input', () => { const v = $('sink').value; $('sink').value = ''; if (!ed && v && canEdit()) startEdit('enter', v); });
+function cancelEdit(){ if (ed) endEdit(); }
+function commitEdit(dr, dc){
+  if (!ed) return true;
+  let v = ed.input.value;
+  if (v[0] === '+' && v.length > 1 && parseNum(v) === null) v = '=' + v;
+  if (v[0] === '='){
+    if (v.trim().length < 2){ toast(t('formulaErr'), 'bad'); return false; }
+    v = fixParens(normalizeFormula(v));
+    if (!tryParse(v)){ toast(t('formulaErr'), 'bad'); ed.input.focus(); return false; }
+  }
+  const a = ed.a; endEdit();
+  if (v !== getRaw(a)) setCells([{a, v}]);
+  if (dr || dc) move(dr || 0, dc || 0, false);
+  return true;
+}
+function setCells(list, opts){
+  const s = st(); const rec = [];
+  for (const {a, v} of list){
+    let nv = v; if (nv === '' && !hasStatic(a)) nv = undefined;
+    const before = s.cells[a]; if (before === nv) continue;
+    rec.push({a, before, after:nv});
+    if (nv === undefined) delete s.cells[a]; else s.cells[a] = nv;
+  }
+  if (!rec.length) return;
+  UNDO[S.cur].push(rec); if (UNDO[S.cur].length > 300) UNDO[S.cur].shift(); REDO[S.cur] = [];
+  const touched = new Set(rec.map(x => x.a)); s.bad = (s.bad || []).filter(a => !touched.has(a));
+  save(); refresh();
+}
+function applyRec(rec, key){ const s = st(); rec.forEach(x => { const v = x[key]; if (v === undefined) delete s.cells[x.a]; else s.cells[x.a] = v; }); save(); refresh(); }
+function undo(){ if (ed) cancelEdit(); const r = UNDO[S.cur].pop(); if (!r) return; applyRec(r, 'before'); REDO[S.cur].push(r); }
+function redo(){ if (ed) cancelEdit(); const r = REDO[S.cur].pop(); if (!r) return; applyRec(r, 'after'); UNDO[S.cur].push(r); }
+function clearSel(){ const R = rng(), list = []; for (let r = R.r1; r <= R.r2; r++) for (let c = R.c1; c <= R.c2; c++) list.push({a:A(c, r), v:''}); setCells(list); }
+
+/* ---------- point mode (click cells while typing a formula) ---------- */
+function caretOf(inp){ const p = inp.selectionStart; return (p === null || p === undefined) ? inp.value.length : p; }
+function pointable(){
+  if (!ed) return false; const inp = ed.input, v = inp.value; if (v[0] !== '=') return false;
+  const pos = caretOf(inp);
+  if (pointRange && pointRange.text === v && pointRange.end === pos) return true;
+  return /[=(;,+\-*/^&<>:]$/.test(v.slice(0, pos).replace(/\s+$/, ''));
+}
+function insertRef(s, e2, ref){
+  const inp = ed.input, v = inp.value, nv = v.slice(0, s) + ref + v.slice(e2);
+  inp.value = nv; syncFrom(inp); pointRange = {start:s, end:s + ref.length, text:nv};
+  inp.focus({preventScroll:true}); try { inp.setSelectionRange(s + ref.length, s + ref.length); } catch (e){}
+  placeEditor(); updRefBoxes(); setMode();
+}
+function pointStart(r, c){
+  const inp = ed.input, v = inp.value, pos = caretOf(inp);
+  if (pointRange && pointRange.text === v && pointRange.end === pos) insertRef(pointRange.start, pointRange.end, A(c, r));
+  else insertRef(pos, pos, A(c, r));
+}
+function pointUpdate(r0, c0, r, c){
+  if (!pointRange) return;
+  const ref = (r0 === r && c0 === c) ? A(c, r) : A(Math.min(c0, c), Math.min(r0, r)) + ':' + A(Math.max(c0, c), Math.max(r0, r));
+  insertRef(pointRange.start, pointRange.end, ref);
+}
+const REF_COLORS = ['#1a73e8','#d93025','#8e24aa','#188038','#e37400','#00838f','#c2185b'];
+function updRefBoxes(){
+  const box = $('refBoxes'); box.innerHTML = ''; if (!ed) return;
+  const v = ed.input.value; if (v[0] !== '=') return;
+  const tk = cur(); let i = 0;
+  const re = new RegExp('(^|[^' + NOTL + '$])\\$?([A-Z]{1,2})\\$?([0-9]{1,5})(?::\\$?([A-Z]{1,2})\\$?([0-9]{1,5}))?(?![' + NOTL + '(])', 'g');
+  splitStr(normalizeFormula(v)).forEach((seg, k) => { if (k % 2) return; let m;
+    while ((m = re.exec(seg))){
+      let c1 = colIdx(m[2]), r1 = +m[3] - 1, c2 = m[4] ? colIdx(m[4]) : c1, r2 = m[5] ? +m[5] - 1 : r1;
+      const R = {r1:Math.min(r1, r2), r2:Math.min(Math.max(r1, r2), tk.rows - 1), c1:Math.min(c1, c2), c2:Math.min(Math.max(c1, c2), tk.cols - 1)};
+      if (R.r1 >= tk.rows || R.c1 >= tk.cols) continue;
+      const d = document.createElement('div'); d.className = 'refbox'; const col_ = REF_COLORS[i++ % REF_COLORS.length];
+      d.style.borderColor = col_; d.style.background = col_ + '1a'; place(d, R); box.appendChild(d);
+    } });
+}
+function toggleAbs(){
+  if (!ed) return; const inp = ed.input;
+  if (inp.value[0] === '='){ const p0 = caretOf(inp); inp.value = normalizeFormula(inp.value); try { inp.setSelectionRange(p0, p0); } catch (e){} }
+  const v = inp.value, pos = caretOf(inp);
+  const re = /(\$?)([A-Z]{1,2})(\$?)([0-9]{1,5})/g; let m, best = null;
+  while ((m = re.exec(v))){ const prev = v[m.index - 1] || ''; if (/[A-Z0-9_.А-ЯЁ$]/i.test(prev) && prev !== '$') continue; if (m.index <= pos) best = m; }
+  if (!best) return;
+  const ca = !!best[1], ra = !!best[3]; let nr;
+  if (!ca && !ra) nr = '$' + best[2] + '$' + best[4]; else if (ca && ra) nr = best[2] + '$' + best[4]; else if (!ca && ra) nr = '$' + best[2] + best[4]; else nr = best[2] + best[4];
+  const s = best.index, e2 = s + best[0].length;
+  inp.value = v.slice(0, s) + nr + v.slice(e2); syncFrom(inp); pointRange = null;
+  inp.focus({preventScroll:true}); try { inp.setSelectionRange(s + nr.length, s + nr.length); } catch (e){}
+  placeEditor(); updRefBoxes(); setMode();
+}
+
+/* ---------- fill / copy / paste ---------- */
+function seriesInfo(raws){
+  if (raws.length < 2) return null; const n = raws.map(r => r[0] === '=' ? null : parseNum(r)); if (n.some(x => x === null)) return null;
+  const step = n[1] - n[0]; for (let i = 2; i < n.length; i++) if (Math.abs(n[i] - n[i-1] - step) > 1e-9) return null;
+  return {first:n[0], step};
+}
+function doFill(s, d){
+  const changes = [];
+  const vertical = d.r1 < s.r1 || d.r2 > s.r2;
+  if (vertical){
+    const h = s.r2 - s.r1 + 1;
+    for (let c = s.c1; c <= s.c2; c++){
+      const ser = seriesInfo(range(s.r1, s.r2).map(r => getRaw(A(c, r))));
+      for (let r = d.r1; r <= d.r2; r++){ if (r >= s.r1 && r <= s.r2) continue;
+        const k = r - s.r1, sr = s.r1 + ((k % h) + h) % h, raw = getRaw(A(c, sr));
+        changes.push({a:A(c, r), v: raw[0] === '=' ? shiftFormula(raw, r - sr, 0) : ser ? fmtNum(rnd(ser.first + ser.step*k, 10)) : raw}); }
+    }
+  } else {
+    const w = s.c2 - s.c1 + 1;
+    for (let r = s.r1; r <= s.r2; r++){
+      const ser = seriesInfo(range(s.c1, s.c2).map(c => getRaw(A(c, r))));
+      for (let c = d.c1; c <= d.c2; c++){ if (c >= s.c1 && c <= s.c2) continue;
+        const k = c - s.c1, sc_ = s.c1 + ((k % w) + w) % w, raw = getRaw(A(sc_, r));
+        changes.push({a:A(c, r), v: raw[0] === '=' ? shiftFormula(raw, 0, c - sc_) : ser ? fmtNum(rnd(ser.first + ser.step*k, 10)) : raw}); }
+    }
+  }
+  setCells(changes);
+}
+function fillDown(){ if (!canEdit()) return; if (ed && !commitEdit()) return; const R = rng(); if (R.r1 === R.r2){ if (R.r1 === 0) return; doFill({...R, r1:R.r1 - 1, r2:R.r1 - 1}, {...R, r1:R.r1 - 1}); } else doFill({...R, r2:R.r1}, R); }
+function fillRight(){ if (!canEdit()) return; if (ed && !commitEdit()) return; const R = rng(); if (R.c1 === R.c2){ if (R.c1 === 0) return; doFill({...R, c1:R.c1 - 1, c2:R.c1 - 1}, {...R, c1:R.c1 - 1}); } else doFill({...R, c2:R.c1}, R); }
+function fillDouble(){
+  const R = rng(), tk = cur(); const nonEmpty = (r, c) => c >= 0 && c < tk.cols && VALS[r] && VALS[r][c] !== null && VALS[r][c] !== '';
+  let adj = -1; if (nonEmpty(R.r2 + 1, R.c1 - 1)) adj = R.c1 - 1; else if (nonEmpty(R.r2 + 1, R.c2 + 1)) adj = R.c2 + 1; if (adj < 0) return;
+  let last = R.r2; while (last + 1 < tk.rows && nonEmpty(last + 1, adj)) last++;
+  if (last > R.r2){ doFill(R, {...R, r2:last}); sel = {ar:R.r1, ac:R.c1, fr:last, fc:R.c2}; drawSel(); }
+}
+function copySel(){ if (ed) return; const R = rng(), raws = []; for (let r = R.r1; r <= R.r2; r++){ const row = []; for (let c = R.c1; c <= R.c2; c++) row.push(getRaw(A(c, r))); raws.push(row); } clip = {...R, raws, si:S.cur}; drawSel(); }
+function pasteClip(){
+  if (!clip || !canEdit()) return; if (ed && !commitEdit()) return;
+  const R = rng(), tk = cur(), h = clip.raws.length, w = clip.raws[0].length, list = [];
+  for (let i = 0; i < h; i++) for (let j = 0; j < w; j++){ const r = R.r1 + i, c = R.c1 + j; if (r >= tk.rows || c >= tk.cols) continue; const raw = clip.raws[i][j]; list.push({a:A(c, r), v: raw[0] === '=' ? shiftFormula(raw, r - (clip.r1 + i), c - (clip.c1 + j)) : raw}); }
+  setCells(list); sel = {ar:R.r1, ac:R.c1, fr:Math.min(R.r1 + h - 1, tk.rows - 1), fc:Math.min(R.c1 + w - 1, tk.cols - 1)}; drawSel();
+}
+
+/* ---------- pointer events ---------- */
+function cellAt(x, y){ const el = document.elementFromPoint(x, y); const td = el && el.closest && el.closest('#grid td'); return td ? {r:+td.dataset.r, c:+td.dataset.c} : null; }
+$('grid').addEventListener('pointerdown', e => {
+  if (!canEdit()) return;
+  const th = e.target.closest('th');
+  if (th){
+    e.preventDefault(); if (ed && !commitEdit()) return; const tk = cur();
+    if (th.classList.contains('ch')){ const c = +th.dataset.c; sel = {ar:0, ac:c, fr:tk.rows - 1, fc:c}; }
+    else if (th.classList.contains('rh')){ const r = +th.dataset.r; sel = {ar:r, ac:0, fr:r, fc:tk.cols - 1}; }
+    else sel = {ar:0, ac:0, fr:tk.rows - 1, fc:tk.cols - 1};
+    drawSel(); return;
+  }
+  const td = e.target.closest('td'); if (!td) return;
+  const r = +td.dataset.r, c = +td.dataset.c;
+  if (ed && pointable()){ e.preventDefault(); pointStart(r, c); drag = {kind:'point', r0:r, c0:c}; return; }
+  if (ed){ if (!commitEdit()){ e.preventDefault(); return; } }
+  const touch = e.pointerType === 'touch' || e.pointerType === 'pen';
+  useSink = !touch;
+  const ae = document.activeElement; if (touch && ae && ae !== document.body && ae.blur) ae.blur();
+  if (!touch) setTimeout(focusSink, 0);
+  if (e.shiftKey || (rangeMode && rangeAnchorSet)){ sel.fr = r; sel.fc = c; }
+  else {
+    if (touch && !rangeMode && sel.ar === r && sel.ac === c && sel.fr === r && sel.fc === c){ startEdit('edit', getRaw(A(c, r))); return; }
+    sel = {ar:r, ac:c, fr:r, fc:c}; if (rangeMode) rangeAnchorSet = true;
+  }
+  drawSel();
+  if (!touch){ drag = {kind:'sel'}; e.preventDefault(); }
+});
+$('grid').addEventListener('dblclick', e => { const td = e.target.closest('td'); if (!td || ed || !canEdit()) return; startEdit('edit', getRaw(activeAddr())); });
+document.addEventListener('pointermove', e => {
+  if (!drag) return; const cell = cellAt(e.clientX, e.clientY); if (!cell) return;
+  if (drag.kind === 'sel'){ if (sel.fr !== cell.r || sel.fc !== cell.c){ sel.fr = cell.r; sel.fc = cell.c; drawSel(); } }
+  else if (drag.kind === 'point') pointUpdate(drag.r0, drag.c0, cell.r, cell.c);
+  else if (drag.kind === 'fill'){
+    const s = drag.src, d = {...s}; const dn = cell.r - s.r2, up = s.r1 - cell.r, rt = cell.c - s.c2, lf = s.c1 - cell.c, mv = Math.max(dn, up, rt, lf);
+    if (mv <= 0){ drag.dst = null; $('fillBox').hidden = true; return; }
+    if (mv === dn) d.r2 = cell.r; else if (mv === up) d.r1 = cell.r; else if (mv === rt) d.c2 = cell.c; else d.c1 = cell.c;
+    drag.dst = d; $('fillBox').hidden = false; place($('fillBox'), d);
+  }
+});
+document.addEventListener('pointerup', () => {
+  if (!drag) return;
+  if (drag.kind === 'fill'){ $('fillBox').hidden = true; const d = drag.dst; if (d){ doFill(drag.src, d); sel = {ar:d.r1, ac:d.c1, fr:d.r2, fc:d.c2}; drawSel(); } }
+  drag = null;
+});
+$('fillHandle').addEventListener('pointerdown', e => { if (!canEdit() || ed) return; e.preventDefault(); e.stopPropagation(); try { e.target.releasePointerCapture(e.pointerId); } catch (x){} drag = {kind:'fill', src:rng(), dst:null}; });
+$('fillHandle').addEventListener('dblclick', e => { e.preventDefault(); if (canEdit()) fillDouble(); });
+
+/* ---------- inputs ---------- */
+$('cellEd').addEventListener('input', () => { syncFrom($('cellEd')); afterInput(); });
+$('cellEd').addEventListener('focus', () => { if (ed) ed.input = $('cellEd'); });
+$('fx').addEventListener('focus', () => { if (!canEdit()){ $('fx').blur(); return; } if (!ed) startEdit('edit', getRaw(activeAddr()), true); else ed.input = $('fx'); });
+$('fx').addEventListener('input', () => { if (!ed) startEdit('edit', $('fx').value, true); syncFrom($('fx')); afterInput(); });
+$('fxOk').addEventListener('pointerdown', e => e.preventDefault());
+$('fxCancel').addEventListener('pointerdown', e => e.preventDefault());
+$('fxOk').onclick = () => commitEdit(0, 0);
+$('fxCancel').onclick = () => cancelEdit();
+$('fxFn').onclick = () => openFuncs();
+$('nameBox').addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return; e.preventDefault();
+  const v = normalizeFormula($('nameBox').value.trim()); const m = /^([A-Z]{1,2}\d{1,4})(?::([A-Z]{1,2}\d{1,4}))?$/.exec(v); const tk = cur();
+  if (m){ const p = P(m[1]), q = P(m[2] || m[1]); if (p.r < tk.rows && p.c < tk.cols && q.r < tk.rows && q.c < tk.cols){ if (ed && !commitEdit()) return; sel = {ar:p.r, ac:p.c, fr:q.r, fc:q.c}; scrollToCell(p.r, p.c); } }
+  $('nameBox').blur(); drawSel();
+});
+
+const ARROWS = {ArrowUp:[-1,0], ArrowDown:[1,0], ArrowLeft:[0,-1], ArrowRight:[0,1]};
+document.addEventListener('keydown', e => {
+  if (!$('modal').hidden){ if (e.key === 'Escape') closeModal(); return; }
+  if ($('work').hidden || S.locked || S.finished) return;
+  const tg = e.target;
+  if (ed && (tg === $('cellEd') || tg === $('fx'))){
+    if (e.key === 'Enter'){ e.preventDefault(); commitEdit(e.shiftKey ? -1 : 1, 0); return; }
+    if (e.key === 'Tab'){ e.preventDefault(); commitEdit(0, e.shiftKey ? -1 : 1); return; }
+    if (e.key === 'Escape'){ e.preventDefault(); cancelEdit(); return; }
+    if (e.key === 'F4'){ e.preventDefault(); toggleAbs(); return; }
+    if (ed.mode === 'enter' && ed.input.value[0] !== '=' && ARROWS[e.key]){ e.preventDefault(); const [dr, dc] = ARROWS[e.key]; commitEdit(dr, dc); return; }
+    return;
+  }
+  if (tg && tg !== $('sink') && (tg.tagName === 'INPUT' || tg.tagName === 'TEXTAREA')) return;
+  const k = e.key, ctrl = e.ctrlKey || e.metaKey;
+  if (ARROWS[k]){ e.preventDefault(); move(ARROWS[k][0], ARROWS[k][1], e.shiftKey); return; }
+  if (k === 'Enter'){ e.preventDefault(); move(e.shiftKey ? -1 : 1, 0, false); return; }
+  if (k === 'Tab'){ e.preventDefault(); move(0, e.shiftKey ? -1 : 1, false); return; }
+  if (k === 'F2'){ e.preventDefault(); startEdit('edit', getRaw(activeAddr())); return; }
+  if (k === 'Delete'){ e.preventDefault(); clearSel(); return; }
+  if (k === 'Backspace'){ e.preventDefault(); startEdit('enter', ''); return; }
+  if (k === 'Escape'){ clip = null; drawSel(); return; }
+  if (ctrl){
+    switch (e.code){
+      case 'KeyZ': e.preventDefault(); e.shiftKey ? redo() : undo(); return;
+      case 'KeyY': e.preventDefault(); redo(); return;
+      case 'KeyC': case 'KeyX': e.preventDefault(); copySel(); return;
+      case 'KeyV': e.preventDefault(); pasteClip(); return;
+      case 'KeyD': e.preventDefault(); fillDown(); return;
+      case 'KeyR': e.preventDefault(); fillRight(); return;
+      case 'KeyA': e.preventDefault(); { const tk = cur(); sel = {ar:0, ac:0, fr:tk.rows - 1, fc:tk.cols - 1}; drawSel(); } return;
+    }
+    return;
+  }
+  if (k.length === 1 && !e.altKey){ e.preventDefault(); startEdit('enter', k); }
+});
+
+/* ---------- toolbar ---------- */
+document.querySelectorAll('#tools button').forEach(b => b.addEventListener('pointerdown', e => { if (ed) e.preventDefault(); }));
+$('tools').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b || !canEdit()) return;
+  switch (b.dataset.act){
+    case 'undo': undo(); break; case 'redo': redo(); break;
+    case 'copy': copySel(); break; case 'paste': pasteClip(); break;
+    case 'clear': if (ed) cancelEdit(); clearSel(); break;
+    case 'fillDown': fillDown(); break; case 'fillRight': fillRight(); break;
+    case 'abs': if (!ed){ const raw = getRaw(activeAddr()); if (raw[0] !== '=') return; startEdit('edit', raw); } toggleAbs(); break;
+    case 'range': rangeMode = !rangeMode; rangeAnchorSet = false; $('btnRange').classList.toggle('on', rangeMode); break;
+    case 'funcs': openFuncs(); break;
+  }
+});
+
+/* ==================== PANEL / TABS ==================== */
+const ICON = {ok:'✓', partial:'◐', wrong:'✗', noformula:'✗', samefail:'✗', fragile:'!', empty:'○'};
+function itemView(it){
+  if (it.status === 'ok' && it.q && it.q.length) return {cls:'partial', msg:it.q.map(q => t('q_' + q)).join('; '), bad:it.qbad};
+  return {cls:it.status, msg:t('st_' + it.status), bad:it.status === 'ok' ? [] : it.bad};
+}
+function renderPanel(){
+  const tk = cur(), s = st(), res = s.result;
+  let h = `<div class="pnum">${t('task')} ${S.cur + 1} / ${TASKS.length}</div><h2>${esc(tr(tk.title))}</h2><div class="ptext">${tr(tk.text)}</div>`;
+  h += `<div class="checkbar"><button class="btn primary" id="btnCheck">✔ ${t('check')}</button>`;
+  if (res) h += `<span class="score">${t('points')}: <b>${fmtPts(res.pts)}</b> / ${res.total}</span>`;
+  h += `</div>`;
+  if (res){
+    h += '<ul class="res">' + res.items.map((it, i) => { const ch = tk.checks[i], vw = itemView(it);
+      const cells = vw.bad && vw.bad.length ? `<br><small>${t('badCells')}${vw.bad.slice(0, 8).join(', ')}${vw.bad.length > 8 ? ' …' : ''}</small>` : '';
+      return `<li class="${vw.cls}"><span class="ic">${ICON[vw.cls]}</span><span class="rt"><code>${ch.cells}</code> ${esc(tr(ch.name))} — ${vw.msg}${cells}</span><span class="pt">${fmtPts(it.pts || 0)}/${fmtPts(ch.p)}</span></li>`; }).join('') + '</ul>';
+    h += `<div class="tiny">${t('checksDone')}: ${s.checks || 0}</div>`;
+  }
+  h += `<p class="about">${t('aboutCheck')}</p>`;
+  $('panel').innerHTML = h; $('btnCheck').onclick = doCheck;
+}
+function doCheck(){
+  if (!canEdit()) return; if (ed && !commitEdit()) return;
+  const s = st(), res = runChecks(S.cur); s.result = res; s.checks = (s.checks || 0) + 1;
+  s.bad = []; res.items.forEach(it => { if (it.status !== 'ok' && it.status !== 'empty') s.bad.push(...it.bad); else if (it.status === 'ok') s.bad.push(...it.qbad); });
+  save(); refresh(); renderPanel(); renderTabs();
+  if (res.pts === res.total) toast('🎉 ' + t('solved'), 'ok');
+}
+function renderTabs(){
+  $('tabs').innerHTML = TASKS.map((tk, i) => { const r = S.sheets[i].result; let b = '';
+    if (r) b = r.pts === r.total ? '<i class="ok">10/10</i>' : `<i>${fmtPts(r.pts)}/${r.total}</i>`;
+    return `<button class="tab${i === S.cur ? ' on' : ''}" data-i="${i}" title="${esc(tr(tk.title))}">${t('task')} ${i + 1}${b}</button>`; }).join('');
+}
+$('tabs').addEventListener('click', e => { const b = e.target.closest('.tab'); if (b) goSheet(+b.dataset.i); });
+function goSheet(i){
+  if (i === S.cur) return; if (ed && !commitEdit()) return;
+  SELS[S.cur] = sel; S.cur = i; sel = SELS[i]; save();
+  buildGrid(); refresh(); renderPanel(); renderTabs(); $('gridWrap').scrollTo(0, 0); focusSink();
+}
+
+/* ==================== MODAL / TOAST ==================== */
+function modal(title, body, buttons){
+  $('mTitle').textContent = title; $('mBody').innerHTML = body; const f = $('mFoot'); f.innerHTML = '';
+  buttons.forEach(b => { const el = document.createElement('button'); el.className = 'btn ' + (b.cls || ''); el.textContent = b.label; el.onclick = () => { if (b.onClick && b.onClick() === false) return; closeModal(); }; f.appendChild(el); });
+  $('modal').hidden = false;
+}
+function closeModal(){ $('modal').hidden = true; if (!ed) focusSink(); }
+let toastT = 0;
+function toast(msg, cls){ const el = $('toast'); el.textContent = msg; el.className = cls || ''; el.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { el.hidden = true; }, 2600); }
+function askPin(onOk){
+  modal(t('pinAsk'), `<input id="pinIn" type="password" inputmode="numeric" autocomplete="off" class="fnsearch" style="font-size:18px;letter-spacing:.2em;text-align:center"><div id="pinErr" class="err-msg"></div>`,
+    [{label:t('cancel')}, {label:t('ok'), cls:'primary', onClick:() => { if ($('pinIn').value !== CONFIG.TEACHER_PIN){ $('pinErr').textContent = t('pinWrong'); return false; } setTimeout(onOk, 0); }}]);
+  const inp = $('pinIn'); inp.focus(); inp.addEventListener('keydown', e => { if (e.key === 'Enter') $('mFoot').lastChild.click(); });
+}
+
+/* function reference — Практикум 3: полный список (все функции, которые понимает движок),
+   у каждой кнопка «Подробнее»: что писать в каждый аргумент, пример с ответом, частая ошибка.
+   ★ — функции Дня 3 (идут первыми). Элементы без n — справка без вставки (знаки, $). */
+const FX = (ru, kz) => L(ru, kz);
+const AR = (rows) => '<ul class="fnargs">' + rows.map(([a, t]) => `<li><code>${a}</code> — ${t}</li>`).join('') + '</ul>';
+const D = (o) => {
+  const P = (lang) => {
+    const ru = lang === 'ru';
+    let h = '';
+    if (o.what) h += `<p>${o.what[lang]}</p>`;
+    if (o.args) h += `<p class="fnh">${ru ? 'Что пишем в скобках' : 'Жақша ішіне не жазамыз'}</p>` + AR(o.args.map(([a, r, k]) => [a, ru ? r : k]));
+    if (o.ex) h += `<p class="fnh">${ru ? 'Пример' : 'Мысал'}</p>` + o.ex.map(([f, r, k]) => `<div class="fnex"><code>${f}</code> → ${ru ? r : k}</div>`).join('');
+    if (o.err) h += `<p class="fnh fnbad">${ru ? 'Частая ошибка' : 'Жиі қате'}</p><p>${o.err[lang]}</p>`;
+    return h;
+  };
+  return {ru: P('ru'), kz: P('kz')};
+};
+
+const FHELP = [
+/* ---------- справка без вставки ---------- */
+{n:'', title:FX('Знаки сравнения и условия','Салыстыру белгілері және шарттар'), s:FX('> < >= <= = <> — как писать условие','> < >= <= = <> — шартты қалай жазу керек'),
+ d:D({what:FX('Условие — это вопрос, на который Excel отвечает ИСТИНА или ЛОЖЬ.','Шарт — Excel ИСТИНА немесе ЛОЖЬ деп жауап беретін сұрақ.'),
+  args:[['>','больше (само число НЕ входит)','үлкен (санның өзі КІРМЕЙДІ)'],['>=','больше или равно (само число входит)','үлкен немесе тең (санның өзі кіреді)'],['<','меньше','кіші'],['<=','меньше или равно','кіші немесе тең'],['=','равно','тең'],['<>','не равно','тең емес']],
+  ex:[['=B2>=180','ИСТИНА, если в B2 180 или больше','B2-де 180 не одан көп болса ИСТИНА'],['=C2="да"','текст сравниваем в кавычках','мәтінді тырнақшада салыстырамыз']],
+  err:FX('В функциях СЧЁТЕСЛИ / СУММЕСЛИ / СРЗНАЧЕСЛИ условие со знаком пишется <b>целиком в кавычках</b>: <code>">1800"</code>, а не <code>&gt;1800</code>. В ЕСЛИ — без кавычек: <code>ЕСЛИ(B2&gt;1800;…)</code>.','СЧЁТЕСЛИ / СУММЕСЛИ / СРЗНАЧЕСЛИ функцияларында белгісі бар шарт <b>толығымен тырнақшада</b> жазылады: <code>">1800"</code>, <code>&gt;1800</code> емес. ЕСЛИ-де — тырнақшасыз: <code>ЕСЛИ(B2&gt;1800;…)</code>.')})},
+{n:'', title:FX('Знак $ — закрепить ссылку','$ белгісі — сілтемені бекіту'), s:FX('$H$2 не сдвигается при протягивании','$H$2 созғанда жылжымайды'),
+ d:D({what:FX('Когда формулу протягивают вниз, ссылки сдвигаются: B2 → B3 → B4. Если ячейка должна остаться той же (норматив, порог, максимум), ставим $ перед буквой и цифрой.','Формуланы төмен созғанда сілтемелер жылжиды: B2 → B3 → B4. Ұяшық өзгермеуі керек болса (норматив, шек, ең көбі), әріп пен сан алдына $ қоямыз.'),
+  ex:[['=B2/$H$2*100','в строке 3 станет =B3/$H$2*100','3-жолда =B3/$H$2*100 болады']],
+  err:FX('Без $ в строке 3 получится H3 — пустая ячейка → деление на 0 (#ДЕЛ/0!). Быстро поставить $: кнопка «Закрепить $» или клавиша F4.','$ болмаса 3-жолда H3 шығады — бос ұяшық → 0-ге бөлу (#ДЕЛ/0!). $-ты тез қою: «$ бекіту» батырмасы немесе F4 пернесі.')})},
+
+/* ---------- ★ День 3 ---------- */
+{n:'ЕСЛИ', en:'IF', star:1, syn:FX('ЕСЛИ(условие; значение_если_ИСТИНА; значение_если_ЛОЖЬ)','ЕСЛИ(шарт; ақиқат_болса_мән; жалған_болса_мән)'), s:FX('Выбирает один из двух ответов по условию («турникет»)','Шарт бойынша екі жауаптың бірін таңдайды («турникет»)'),
+ d:D({what:FX('ЕСЛИ проверяет условие. Верно — пишет второй аргумент, неверно — третий.','ЕСЛИ шартты тексереді. Дұрыс болса — екінші аргументті, дұрыс болмаса — үшіншісін жазады.'),
+  args:[['условие','вопрос со знаком сравнения: <code>B2>=180</code>, <code>C2="да"</code>','салыстыру белгісі бар сұрақ: <code>B2>=180</code>, <code>C2="иә"</code>'],['если ИСТИНА','что написать, если условие верно: число, текст в кавычках или формула','шарт дұрыс болса не жазу керек: сан, тырнақшадағы мәтін немесе формула'],['если ЛОЖЬ','что написать, если условие неверно','шарт дұрыс болмаса не жазу керек']],
+  ex:[['=ЕСЛИ(B2>=180;"да";"нет")','B2 = 180 → «да»; B2 = 179 → «нет»','B2 = 180 → «иә»; B2 = 179 → «жоқ»'],['=ЕСЛИ(C2>20;5;0)','C2 = 20 → 0 (20 не больше 20)','C2 = 20 → 0 (20 саны 20-дан үлкен емес)']],
+  err:FX('Текст без кавычек: <code>ЕСЛИ(B2>=180;да;нет)</code> → ошибка #ИМЯ?. Пишите <code>"да"</code>. Разделитель между частями — точка с запятой <code>;</code>.','Мәтін тырнақшасыз: <code>ЕСЛИ(B2>=180;иә;жоқ)</code> → #ИМЯ? қатесі. <code>"иә"</code> деп жазыңыз. Бөліктер арасындағы бөлгіш — нүктелі үтір <code>;</code>.')})},
+{n:'ЕСЛИ', key:'ЕСЛИ2', en:'IF', star:1, title:FX('Вложенное ЕСЛИ (лестница)','Кірістірілген ЕСЛИ (баспалдақ)'), syn:FX('ЕСЛИ(усл1; отв1; ЕСЛИ(усл2; отв2; ЕСЛИ(усл3; отв3; иначе)))','ЕСЛИ(шарт1; жауап1; ЕСЛИ(шарт2; жауап2; ЕСЛИ(шарт3; жауап3; әйтпесе)))'), s:FX('Когда ответов больше двух: оценка 5/4/3/2, тарифы','Жауап екіден көп болғанда: 5/4/3/2 бағасы, тарифтер'),
+ d:D({what:FX('Третий аргумент ЕСЛИ — снова ЕСЛИ. Excel идёт по ступенькам сверху вниз и останавливается на первом верном условии. Три ЕСЛИ дают четыре разных ответа.','ЕСЛИ-дің үшінші аргументі — тағы ЕСЛИ. Excel баспалдақпен жоғарыдан төмен жүріп, бірінші дұрыс шартта тоқтайды. Үш ЕСЛИ төрт түрлі жауап береді.'),
+  args:[['усл1','самая высокая граница: <code>C2>=85</code>','ең жоғары шекара: <code>C2>=85</code>'],['отв1','ответ для неё: 5','оның жауабы: 5'],['ЕСЛИ(…)','следующая ступенька: <code>ЕСЛИ(C2>=65;4;…)</code>','келесі баспалдақ: <code>ЕСЛИ(C2>=65;4;…)</code>'],['иначе','последний ответ — когда ничего не подошло: 2','соңғы жауап — ештеңе сәйкес келмесе: 2']],
+  ex:[['=ЕСЛИ(C2>=85;5;ЕСЛИ(C2>=65;4;ЕСЛИ(C2>=40;3;2)))','C2 = 70 → 4; C2 = 40 → 3; C2 = 39 → 2','C2 = 70 → 4; C2 = 40 → 3; C2 = 39 → 2']],
+  err:FX('Начинать с маленькой границы: <code>ЕСЛИ(C2>=40;3;ЕСЛИ(C2>=65;4;…))</code> — тогда 90% тоже даст 3, до проверки на 5 Excel не дойдёт. И считайте скобки: сколько ЕСЛИ — столько «)» в конце.','Кіші шекарадан бастау: <code>ЕСЛИ(C2>=40;3;ЕСЛИ(C2>=65;4;…))</code> — онда 90% да 3 береді, Excel 5-ке тексеруге жетпейді. Жақшаларды санаңыз: қанша ЕСЛИ болса — соңында сонша «)».')})},
+{n:'И', en:'AND', star:1, syn:FX('И(условие1; условие2; …)','И(шарт1; шарт2; …)'), s:FX('ИСТИНА, только если верны ВСЕ условия («строгий судья»)','БАРЛЫҚ шарт орындалса ғана ИСТИНА («қатал төреші»)'),
+ d:D({what:FX('Обычно ставится внутрь ЕСЛИ как условие.','Әдетте ЕСЛИ ішіне шарт ретінде қойылады.'),
+  args:[['условие1; условие2; …','сравнения через «;», сколько угодно: <code>B2>=25; C2>=25</code>','«;» арқылы салыстырулар, қанша болса да: <code>B2>=25; C2>=25</code>']],
+  ex:[['=И(5>3;2>4)','ЛОЖЬ — второе условие неверно','ЛОЖЬ — екінші шарт дұрыс емес'],['=ЕСЛИ(И(B2>=25;C2>=25);"да";"нет")','«да», только если обе оценки ≥ 25','екі баға да ≥ 25 болса ғана «иә»']],
+  err:FX('Писать «как в математике»: <code>10&lt;=A1&lt;=20</code> — Excel так не понимает. Правильно: <code>И(A1>=10;A1<=20)</code> — имя операции впереди.','«Математикадағыдай» жазу: <code>10&lt;=A1&lt;=20</code> — Excel бұлай түсінбейді. Дұрысы: <code>И(A1>=10;A1<=20)</code> — амал аты алдында.')})},
+{n:'ИЛИ', en:'OR', star:1, syn:FX('ИЛИ(условие1; условие2; …)','ИЛИ(шарт1; шарт2; …)'), s:FX('ИСТИНА, если верно ХОТЯ БЫ ОДНО условие («добрый вахтёр»)','КЕМІНДЕ БІР шарт орындалса ИСТИНА («мейірімді күзетші»)'),
+ d:D({args:[['условие1; условие2; …','сравнения через «;»','«;» арқылы салыстырулар']],
+  ex:[['=ИЛИ(1>2;3>2)','ИСТИНА — второе условие верно','ИСТИНА — екінші шарт дұрыс'],['=ЕСЛИ(ИЛИ(F2>=100;E2="да");"да";"нет")','«да», если сумма ≥ 100 или призёр','қосынды ≥ 100 немесе жүлдегер болса «иә»']],
+  err:FX('Путать И и ИЛИ. Спросите себя: «нужно всё сразу?» → И. «Хватит одного?» → ИЛИ.','И мен ИЛИ-ді шатастыру. Өзіңізден сұраңыз: «бәрі бірден керек пе?» → И. «Біреуі жеткілікті ме?» → ИЛИ.')})},
+{n:'НЕ', en:'NOT', star:1, syn:FX('НЕ(условие)','НЕ(шарт)'), s:FX('Переворачивает: ИСТИНА ↔ ЛОЖЬ','Аударады: ИСТИНА ↔ ЛОЖЬ'),
+ d:D({args:[['условие','одно условие, которое нужно перевернуть','аударылатын бір шарт']],
+  ex:[['=НЕ(4>5)','ИСТИНА (4>5 — ложь, НЕ переворачивает)','ИСТИНА (4>5 — жалған, НЕ аударады)'],['=И(I2=4;НЕ(G2=4))','все оценки 4–5, но НЕ все пятёрки','барлық баға 4–5, бірақ бәрі «5» ЕМЕС']],
+  err:FX('НЕ принимает только одно условие. Для «не равно» можно и без НЕ: <code>G2&lt;&gt;4</code>.','НЕ тек бір шартты қабылдайды. «Тең емес» үшін НЕ-сіз де болады: <code>G2&lt;&gt;4</code>.')})},
+{n:'', star:1, title:FX('Лайфхак: ИСТИНА = 1, ЛОЖЬ = 0','Лайфхак: ИСТИНА = 1, ЛОЖЬ = 0'), s:FX('Сравнения можно складывать и умножать','Салыстыруларды қосуға және көбейтуге болады'),
+ d:D({what:FX('В арифметике Excel превращает ИСТИНА в 1, ЛОЖЬ в 0. Сумма сравнений = сколько условий выполнено. Произведение = 1, только если выполнены все (как И).','Арифметикада Excel ИСТИНА-ны 1-ге, ЛОЖЬ-ты 0-ге айналдырады. Салыстырулардың қосындысы = қанша шарт орындалды. Көбейтінді = 1 тек бәрі орындалса (И сияқты).'),
+  ex:[['=(B2>=4)+(C2>=4)+(D2>=4)+(E2>=4)','оценки 5, 3, 4, 4 → 3','бағалар 5, 3, 4, 4 → 3'],['=(B2>=25)*(C2>=25)','1, если оба ≥ 25, иначе 0','екеуі де ≥ 25 болса 1, әйтпесе 0']],
+  err:FX('Забыть скобки вокруг каждого сравнения: <code>=B2>=4+C2>=4</code> считается совсем иначе.','Әр салыстыруды жақшаға алмау: <code>=B2>=4+C2>=4</code> мүлде басқаша есептеледі.')})},
+{n:'СЧЁТЕСЛИ', en:'COUNTIF', star:1, syn:FX('СЧЁТЕСЛИ(диапазон; критерий)','СЧЁТЕСЛИ(ауқым; шарт)'), s:FX('Сколько ячеек подходят под условие','Шартқа сәйкес келетін ұяшықтар саны'),
+ d:D({args:[['диапазон','где ищем: <code>B2:B11</code>','қайдан іздейміз: <code>B2:B11</code>'],['критерий','что считаем: число <code>5</code>, текст <code>"да"</code> или условие в кавычках <code>">1800"</code>, <code>"<>60"</code>','нені санаймыз: сан <code>5</code>, мәтін <code>"иә"</code> немесе тырнақшадағы шарт <code>">1800"</code>, <code>"<>60"</code>']],
+  ex:[['=СЧЁТЕСЛИ(D2:D11;"да")','сколько «да» в столбце D','D бағанында қанша «иә»'],['=СЧЁТЕСЛИ(B2:B11;">1800")','сколько цен больше 1800','қанша баға 1800-ден үлкен'],['=СЧЁТЕСЛИ(B2:E2;5)','сколько пятёрок в строке','жолда қанша «5»']],
+  err:FX('Знак без кавычек: <code>СЧЁТЕСЛИ(B2:B11;>1800)</code> → ошибка. И имя пишется слитно: «СЧЁТ ЕСЛИ» с пробелом → #ИМЯ?.','Белгі тырнақшасыз: <code>СЧЁТЕСЛИ(B2:B11;>1800)</code> → қате. Атауы бірге жазылады: «СЧЁТ ЕСЛИ» бос орынмен → #ИМЯ?.')})},
+{n:'СУММЕСЛИ', en:'SUMIF', star:1, syn:FX('СУММЕСЛИ(диапазон; критерий; [диапазон_суммирования])','СУММЕСЛИ(ауқым; шарт; [қосылатын_ауқым])'), s:FX('Сумма только тех строк, что подходят под условие','Тек шартқа сәйкес жолдардың қосындысы'),
+ d:D({args:[['диапазон','где ПРОВЕРЯЕМ условие (например, цены)','шартты ҚАЙДА тексереміз (мысалы, бағалар)'],['критерий','условие: <code>"<1700"</code>, <code>">=2000"</code>, <code>"Алгебра"</code>','шарт: <code>"<1700"</code>, <code>">=2000"</code>, <code>"Алгебра"</code>'],['диапазон_суммирования','что СКЛАДЫВАЕМ (например, количество). Квадратные скобки [ ] значат «можно не писать» — тогда складывается сам первый диапазон','нені ҚОСАМЫЗ (мысалы, саны). [ ] жақшалары «жазбауға болады» дегенді білдіреді — онда бірінші ауқымның өзі қосылады']],
+  ex:[['=СУММЕСЛИ(B2:B11;"<1700";C2:C11)','сумма количеств у книг дешевле 1700','1700-ден арзан кітаптар санының қосындысы'],['=СУММЕСЛИ(B2:B11;">1800")','сумма самих цен больше 1800','1800-ден үлкен бағалардың өзінің қосындысы']],
+  err:FX('Перепутать порядок: сначала диапазон с условием, в конце — что складываем. Диапазоны должны быть одной длины (B2:B11 и C2:C11).','Ретін шатастыру: алдымен шарт тексерілетін ауқым, соңында — нені қосамыз. Ауқымдардың ұзындығы бірдей болуы керек (B2:B11 және C2:C11).')})},
+{n:'СРЗНАЧЕСЛИ', en:'AVERAGEIF', star:1, syn:FX('СРЗНАЧЕСЛИ(диапазон; критерий; [диапазон_усреднения])','СРЗНАЧЕСЛИ(ауқым; шарт; [орташа_ауқым])'), s:FX('Среднее только тех строк, что подходят под условие','Тек шартқа сәйкес жолдардың орташасы'),
+ d:D({args:[['диапазон','где проверяем условие','шартты қайда тексереміз'],['критерий','условие в кавычках: <code>">70"</code>','тырнақшадағы шарт: <code>">70"</code>'],['диапазон_усреднения','из чего считаем среднее','орташаны неден есептейміз']],
+  ex:[['=СРЗНАЧЕСЛИ(C2:C11;">70";B2:B11)','средняя цена книг, которых больше 70 шт.','саны 70-тен көп кітаптардың орташа бағасы'],['=ОКРУГЛ(СРЗНАЧЕСЛИ(C2:C11;">70";B2:B11);0)','то же, округлённое до целого','сол, бүтінге дейін дөңгелектелген']],
+  err:FX('Если ни одна строка не подошла — #ДЕЛ/0! (делить не на что).','Бірде-бір жол сәйкес келмесе — #ДЕЛ/0! (бөлетін ештеңе жоқ).')})},
+{n:'СЧЁТЕСЛИМН', en:'COUNTIFS', star:1, syn:FX('СЧЁТЕСЛИМН(диапазон1; критерий1; диапазон2; критерий2; …)','СЧЁТЕСЛИМН(ауқым1; шарт1; ауқым2; шарт2; …)'), s:FX('Сколько строк, где выполнены ВСЕ условия','БАРЛЫҚ шарт орындалған жолдар саны'),
+ d:D({what:FX('МН = «много условий». Условия идут парами: где проверяем; что проверяем.','МН = «көп шарт». Шарттар жұппен жазылады: қайда тексереміз; нені тексереміз.'),
+  args:[['диапазон1; критерий1','первая пара: <code>B2:B16;"11 А"</code>','бірінші жұп: <code>B2:B16;"11 А"</code>'],['диапазон2; критерий2','вторая пара: <code>C2:C16;">=70"</code>','екінші жұп: <code>C2:C16;">=70"</code>']],
+  ex:[['=СЧЁТЕСЛИМН(B2:B16;"11 А";C2:C16;">=70")','сколько учеников 11 А набрали 70 и больше','11 А-да 70 және одан көп жинағандар саны']],
+  err:FX('Забыть пару: у каждого диапазона должен быть свой критерий.','Жұпты ұмыту: әр ауқымның өз шарты болуы керек.')})},
+{n:'СУММЕСЛИМН', en:'SUMIFS', star:1, syn:FX('СУММЕСЛИМН(диапазон_суммирования; диапазон1; критерий1; …)','СУММЕСЛИМН(қосылатын_ауқым; ауқым1; шарт1; …)'), s:FX('Сумма по нескольким условиям','Бірнеше шарт бойынша қосынды'),
+ d:D({args:[['диапазон_суммирования','что складываем — здесь он ПЕРВЫЙ (в СУММЕСЛИ — последний!)','нені қосамыз — мұнда ол БІРІНШІ (СУММЕСЛИ-де — соңғы!)'],['диапазон1; критерий1; …','пары условий, как в СЧЁТЕСЛИМН','СЧЁТЕСЛИМН-дегідей шарт жұптары']],
+  ex:[['=СУММЕСЛИМН(C2:C11;B2:B11;">=1500";B2:B11;"<=2000")','сколько экземпляров у книг ценой от 1500 до 2000','бағасы 1500-ден 2000-ға дейінгі кітаптар данасы']],
+  err:FX('Поставить диапазон суммирования в конец, как в СУММЕСЛИ.','Қосылатын ауқымды СУММЕСЛИ-дегідей соңына қою.')})},
+
+/* ---------- основные ---------- */
+{n:'СУММ', en:'SUM', syn:FX('СУММ(число1; [число2]; …)','СУММ(сан1; [сан2]; …)'), s:FX('Сумма чисел и диапазонов','Сандар мен ауқымдардың қосындысы'),
+ d:D({args:[['число1; число2; …','числа, ячейки или диапазоны через «;»: <code>B2:D2</code>, <code>A1;C5</code>','«;» арқылы сандар, ұяшықтар немесе ауқымдар: <code>B2:D2</code>, <code>A1;C5</code>']],
+  ex:[['=СУММ(B2:D2)','B2 + C2 + D2','B2 + C2 + D2']], err:FX('<code>A1:A5</code> — от A1 до A5 (5 ячеек); <code>A1;A5</code> — только две ячейки.','<code>A1:A5</code> — A1-ден A5-ке дейін (5 ұяшық); <code>A1;A5</code> — тек екі ұяшық.')})},
+{n:'СРЗНАЧ', en:'AVERAGE', syn:FX('СРЗНАЧ(диапазон)','СРЗНАЧ(ауқым)'), s:FX('Среднее арифметическое','Арифметикалық орта'),
+ d:D({what:FX('Сумма ÷ количество чисел. Пустые ячейки и текст не считаются.','Қосынды ÷ сандар саны. Бос ұяшықтар мен мәтін есептелмейді.'), ex:[['=СРЗНАЧ(B2:E2)','оценки 5, 4, 4, 3 → 4','бағалар 5, 4, 4, 3 → 4']]})},
+{n:'МАКС', en:'MAX', syn:FX('МАКС(диапазон)','МАКС(ауқым)'), s:FX('Наибольшее значение','Ең үлкен мән'), d:D({ex:[['=МАКС(B2:B11)','самый высокий балл','ең жоғары ұпай']]})},
+{n:'МИН', en:'MIN', syn:FX('МИН(диапазон)','МИН(ауқым)'), s:FX('Наименьшее значение','Ең кіші мән'), d:D({ex:[['=МИН(B2:E2)','самая низкая оценка ученика','оқушының ең төмен бағасы']]})},
+{n:'СЧЁТ', en:'COUNT', syn:FX('СЧЁТ(диапазон)','СЧЁТ(ауқым)'), s:FX('Сколько ячеек с ЧИСЛАМИ','САНДАРЫ бар ұяшықтар саны'), d:D({what:FX('Текст («н», «да») и пустые не считает.','Мәтінді («ж», «иә») және бостарды санамайды.'), ex:[['=СЧЁТ(B2:F2)','5, н, 4, пусто, 3 → 3','5, ж, 4, бос, 3 → 3']]})},
+{n:'СЧЁТЗ', en:'COUNTA', syn:FX('СЧЁТЗ(диапазон)','СЧЁТЗ(ауқым)'), s:FX('Сколько НЕПУСТЫХ ячеек (числа и текст)','БОС ЕМЕС ұяшықтар саны (сан да, мәтін де)'), d:D({ex:[['=СЧЁТЗ(A2:A11)','сколько имён в списке','тізімде қанша есім']]})},
+{n:'СЧИТАТЬПУСТОТЫ', en:'COUNTBLANK', syn:FX('СЧИТАТЬПУСТОТЫ(диапазон)','СЧИТАТЬПУСТОТЫ(ауқым)'), s:FX('Сколько ПУСТЫХ ячеек','БОС ұяшықтар саны'), d:D({ex:[['=СЧИТАТЬПУСТОТЫ(C2:C11)','сколько вопросов без ответа','қанша сұрақ жауапсыз']]})},
+{n:'ОКРУГЛ', en:'ROUND', syn:FX('ОКРУГЛ(число; число_разрядов)','ОКРУГЛ(сан; разрядтар_саны)'), s:FX('Округление по правилам математики','Математика ережесі бойынша дөңгелектеу'),
+ d:D({args:[['число','что округляем — число, ячейка или формула: <code>СРЗНАЧ(B2:E2)</code>','нені дөңгелектейміз — сан, ұяшық не формула: <code>СРЗНАЧ(B2:E2)</code>'],['число_разрядов','сколько цифр после запятой: 0 — до целого, 1 — до десятых, 2 — до сотых','үтірден кейін неше цифр: 0 — бүтінге, 1 — ондыққа, 2 — жүздікке дейін']],
+  ex:[['=ОКРУГЛ(4,25;1)','4,3','4,3'],['=ОКРУГЛ(H2/H3*100;0)','процент до целого','пайыз бүтінге дейін']],
+  err:FX('Забыть второй аргумент — он обязателен. Формат ячейки («меньше знаков») только прячет цифры, а ОКРУГЛ меняет само число.','Екінші аргументті ұмыту — ол міндетті. Ұяшық пішімі цифрларды тек жасырады, ал ОКРУГЛ санның өзін өзгертеді.')})},
+{n:'ОКРУГЛВВЕРХ', en:'ROUNDUP', syn:FX('ОКРУГЛВВЕРХ(число; число_разрядов)','ОКРУГЛВВЕРХ(сан; разрядтар_саны)'), s:FX('Округление всегда вверх','Әрқашан жоғары дөңгелектеу'), d:D({ex:[['=ОКРУГЛВВЕРХ(25/12;0)','2,08 → 3 (автобусов нужно 3)','2,08 → 3 (3 автобус керек)']]})},
+{n:'ОКРУГЛВНИЗ', en:'ROUNDDOWN', syn:FX('ОКРУГЛВНИЗ(число; число_разрядов)','ОКРУГЛВНИЗ(сан; разрядтар_саны)'), s:FX('Округление всегда вниз (отбросить)','Әрқашан төмен дөңгелектеу (тастау)'), d:D({ex:[['=ОКРУГЛВНИЗ(4,99;0)','4','4']]})},
+{n:'ОТБР', en:'TRUNC', syn:FX('ОТБР(число; [число_разрядов])','ОТБР(сан; [разрядтар_саны])'), s:FX('Отбрасывает дробную часть','Бөлшек бөлігін тастайды'), d:D({ex:[['=ОТБР(7,8)','7','7'],['=ОТБР(-7,8)','−7','−7']]})},
+{n:'ЦЕЛОЕ', en:'INT', syn:FX('ЦЕЛОЕ(число)','ЦЕЛОЕ(сан)'), s:FX('Округляет вниз до целого','Бүтінге дейін төмен дөңгелектейді'), d:D({ex:[['=ЦЕЛОЕ(25/12)','2 (полных групп)','2 (толық топ)'],['=ЦЕЛОЕ(-7,8)','−8 (вниз!)','−8 (төмен!)']]})},
+{n:'ОСТАТ', en:'MOD', syn:FX('ОСТАТ(число; делитель)','ОСТАТ(сан; бөлгіш)'), s:FX('Остаток от деления','Бөлудің қалдығы'), d:D({ex:[['=ОСТАТ(25;12)','1','1'],['=ЕСЛИ(ОСТАТ(A2;2)=0;"чётное";"нечётное")','проверка на чётность','жұптыққа тексеру']]})},
+{n:'СТЕПЕНЬ', en:'POWER', syn:FX('СТЕПЕНЬ(число; степень)','СТЕПЕНЬ(сан; дәреже)'), s:FX('Возведение в степень (то же, что ^)','Дәрежеге шығару (^ сияқты)'), d:D({ex:[['=СТЕПЕНЬ(2;10)','1024 (то же, что =2^10)','1024 (=2^10 сияқты)']]})},
+{n:'КОРЕНЬ', en:'SQRT', syn:FX('КОРЕНЬ(число)','КОРЕНЬ(сан)'), s:FX('Квадратный корень','Квадрат түбір'), d:D({ex:[['=КОРЕНЬ(49)','7','7']], err:FX('Корень из отрицательного числа → #ЧИСЛО!','Теріс саннан түбір → #ЧИСЛО!')})},
+{n:'ABS', en:'ABS', syn:FX('ABS(число)','ABS(сан)'), s:FX('Модуль числа (без минуса)','Санның модулі (минуссыз)'), d:D({ex:[['=ABS(-5)','5','5']]})},
+{n:'ПРОИЗВЕД', en:'PRODUCT', syn:FX('ПРОИЗВЕД(число1; …)','ПРОИЗВЕД(сан1; …)'), s:FX('Произведение чисел','Сандардың көбейтіндісі'), d:D({ex:[['=ПРОИЗВЕД(B2:C2)','B2 × C2','B2 × C2']]})},
+{n:'ПИ', en:'PI', syn:FX('ПИ()','ПИ()'), s:FX('Число π = 3,14159…','π саны = 3,14159…'), d:D({ex:[['=ПИ()*B2^2','площадь круга радиуса B2','B2 радиусты шеңбердің ауданы']], err:FX('Скобки нужны, даже пустые: <code>ПИ()</code>.','Жақша бос болса да керек: <code>ПИ()</code>.')})},
+{n:'МЕДИАНА', en:'MEDIAN', syn:FX('МЕДИАНА(диапазон)','МЕДИАНА(ауқым)'), s:FX('Число в середине списка по порядку','Реттелген тізімнің ортасындағы сан'), d:D({ex:[['=МЕДИАНА(3;9;5)','5 (по порядку 3, 5, 9)','5 (ретімен 3, 5, 9)'],['=МЕДИАНА(2;4;6;8)','5 (среднее двух средних)','5 (ортадағы екеуінің орташасы)']]})},
+{n:'РАНГ', en:'RANK', syn:FX('РАНГ(число; диапазон; [порядок])','РАНГ(сан; ауқым; [рет])'), s:FX('Место числа в списке','Санның тізімдегі орны'),
+ d:D({args:[['число','чьё место ищем: <code>B2</code>','кімнің орнын іздейміз: <code>B2</code>'],['диапазон','с кем сравниваем — закрепить: <code>$B$2:$B$11</code>','кіммен салыстырамыз — бекіту: <code>$B$2:$B$11</code>'],['порядок','0 или не писать — больше = выше место; 1 — наоборот','0 не жазбау — көп = жоғары орын; 1 — керісінше']],
+  ex:[['=РАНГ(B2;$B$2:$B$11)','1, если у B2 больше всех баллов','B2-нің ұпайы ең көп болса 1']]})},
+{n:'НАИБОЛЬШИЙ', en:'LARGE', syn:FX('НАИБОЛЬШИЙ(диапазон; k)','НАИБОЛЬШИЙ(ауқым; k)'), s:FX('k-е по величине значение','k-шы ең үлкен мән'),
+ d:D({args:[['диапазон','где ищем','қайдан іздейміз'],['k','какое по счёту сверху: 1 — самое большое, 2 — второе, 3 — третье','жоғарыдан нешінші: 1 — ең үлкені, 2 — екінші, 3 — үшінші']],
+  ex:[['=НАИБОЛЬШИЙ(B2:B11;2)','балл за 2-е место','2-орынның ұпайы']]})},
+{n:'НАИМЕНЬШИЙ', en:'SMALL', syn:FX('НАИМЕНЬШИЙ(диапазон; k)','НАИМЕНЬШИЙ(ауқым; k)'), s:FX('k-е наименьшее значение','k-шы ең кіші мән'),
+ d:D({args:[['k','какое по счёту снизу: 1 — самое маленькое','төменнен нешінші: 1 — ең кішісі']], ex:[['=НАИМЕНЬШИЙ(B2:B11;1)','то же, что МИН','МИН-мен бірдей']]})},
+{n:'ВПР', en:'VLOOKUP', syn:FX('ВПР(искомое; таблица; номер_столбца; [интервальный_просмотр])','ВПР(ізделетін; кесте; баған_нөмірі; [аралық_іздеу])'), s:FX('Находит строку по первому столбцу и берёт значение из нужного столбца','Бірінші баған бойынша жолды тауып, керек бағаннан мән алады'),
+ d:D({args:[['искомое','что ищем: <code>A2</code>','нені іздейміз: <code>A2</code>'],['таблица','справочник; ищем в его ПЕРВОМ столбце; закрепить: <code>$G$2:$I$8</code>','анықтамалық; оның БІРІНШІ бағанынан іздейміз; бекіту: <code>$G$2:$I$8</code>'],['номер_столбца','из какого столбца таблицы взять ответ: 2 — второй','жауапты кестенің қай бағанынан алу: 2 — екінші'],['интервальный_просмотр','0 (или ЛОЖЬ) — точное совпадение. Почти всегда пишем 0','0 (немесе ЛОЖЬ) — дәл сәйкестік. Әрдайым дерлік 0 жазамыз']],
+  ex:[['=ВПР(A2;$G$2:$H$8;2;0)','цена товара с кодом из A2','A2-дегі кодты тауардың бағасы']],
+  err:FX('#Н/Д — такого значения нет в первом столбце. Забыли 0 в конце — может найти «похожее» и дать неверный ответ.','#Н/Д — бірінші бағанда ондай мән жоқ. Соңындағы 0-ді ұмытсаңыз — «ұқсасын» тауып, қате жауап беруі мүмкін.')})},
+{n:'ЕСЛИОШИБКА', en:'IFERROR', syn:FX('ЕСЛИОШИБКА(значение; значение_при_ошибке)','ЕСЛИОШИБКА(мән; қате_болғандағы_мән)'), s:FX('Если формула дала ошибку — показать другое','Формула қате берсе — басқаны көрсету'),
+ d:D({args:[['значение','обычная формула: <code>ВПР(…)</code>','кәдімгі формула: <code>ВПР(…)</code>'],['значение_при_ошибке','что показать вместо #Н/Д, #ДЕЛ/0!: <code>"не найден"</code>, 0','#Н/Д, #ДЕЛ/0! орнына не көрсету: <code>"табылмады"</code>, 0']],
+  ex:[['=ЕСЛИОШИБКА(B2/C2;0)','если C2 = 0 → 0 вместо #ДЕЛ/0!','C2 = 0 болса → #ДЕЛ/0! орнына 0']]})},
+{n:'СЦЕПИТЬ', en:'CONCATENATE', syn:FX('СЦЕПИТЬ(текст1; текст2; …)','СЦЕПИТЬ(мәтін1; мәтін2; …)'), s:FX('Склеивает тексты (то же, что &)','Мәтіндерді біріктіреді (& сияқты)'),
+ d:D({args:[['текст1; текст2; …','ячейки и тексты в кавычках по порядку; пробел — это <code>" "</code>','ұяшықтар мен тырнақшадағы мәтіндер ретімен; бос орын — <code>" "</code>']],
+  ex:[['=СЦЕПИТЬ(A2;" ";B2)','«Айбек» и «Р.» → «Айбек Р.»','«Айбек» және «Р.» → «Айбек Р.»'],['=A2&" "&B2','то же самое через &','& арқылы сол']]})},
+{n:'ПОИСКПОЗ', en:'MATCH', syn:FX('ПОИСКПОЗ(искомое; диапазон; [тип])','ПОИСКПОЗ(ізделетін; ауқым; [түрі])'), s:FX('Номер позиции значения в списке','Мәннің тізімдегі орын нөмірі'),
+ d:D({args:[['искомое','что ищем','нені іздейміз'],['диапазон','один столбец или строка','бір баған не жол'],['тип','0 — точное совпадение','0 — дәл сәйкестік']],
+  ex:[['=ПОИСКПОЗ("Химия";A2:A11;0)','4 — Химия четвёртая в списке','4 — Химия тізімде төртінші']]})},
+{n:'ИНДЕКС', en:'INDEX', syn:FX('ИНДЕКС(диапазон; номер_строки; [номер_столбца])','ИНДЕКС(ауқым; жол_нөмірі; [баған_нөмірі])'), s:FX('Значение по номеру строки (и столбца)','Жол (және баған) нөмірі бойынша мән'),
+ d:D({args:[['диапазон','откуда берём','қайдан аламыз'],['номер_строки','какая по счёту строка диапазона (не номер строки листа!)','ауқымның нешінші жолы (парақ жолының нөмірі емес!)']],
+  ex:[['=ИНДЕКС(B2:B11;3)','цена 3-го учебника','3-оқулықтың бағасы'],['=ИНДЕКС(B2:B11;ПОИСКПОЗ("Химия";A2:A11;0))','цена «Химии» — связка ИНДЕКС + ПОИСКПОЗ','«Химия» бағасы — ИНДЕКС + ПОИСКПОЗ байламы']]})}
+];
+
+const FN_STAR = {label: L('Сегодня','Бүгін'), names: ['СЦЕПИТЬ','СУММ','СРЗНАЧ','МАКС','МИН','ОКРУГЛ','ЕСЛИ','СЧЁТЕСЛИ','СЧЁТЗ']};
+const isStar = f => FN_STAR.names ? (!!f.n && !f.key && FN_STAR.names.includes(f.n)) : !!f.star;
+
+function openFuncs(){
+  if (!CONFIG.SHOW_FUNCTION_HELP) return;
+  const more = S.lang === 'kz' ? 'Толығырақ' : 'Подробнее', less = S.lang === 'kz' ? 'Жасыру' : 'Скрыть';
+  const ins = S.lang === 'kz' ? 'Формулаға қою' : 'Вставить в формулу';
+  const day3 = tr(FN_STAR.label);
+  const list = () => { const q = ($('fnQ') ? $('fnQ').value : '').trim().toUpperCase();
+    return FHELP.map((f, i) => ({f, i})).sort((a, b) => (isStar(b.f) - isStar(a.f)) || (a.i - b.i)).filter(({f}) => !q || (f.n && f.n.includes(q)) || (f.en && f.en.includes(q)) || tr(f.s).toUpperCase().includes(q) || (f.title && tr(f.title).toUpperCase().includes(q)))
+      .map(({f, i}) => `<li data-i="${i}" class="${isStar(f) ? 'star' : ''}">`
+        + `<div class="fnhead">${isStar(f) ? `<span class="fnstar">★ ${day3}</span>` : ''}<b>${f.title ? esc(tr(f.title)) : f.n}</b>${f.en && !f.title ? ` <small>(${f.en})</small>` : ''}`
+        + (f.syn ? `<br><code>${esc(tr(f.syn))}</code>` : '') + `<br>${esc(tr(f.s))}</div>`
+        + `<div class="fnbtns"><button type="button" class="fnmore">${more} ▾</button>${f.n ? `<button type="button" class="fnins">${ins}</button>` : ''}</div>`
+        + `<div class="fndet" hidden>${tr(f.d)}</div></li>`).join(''); };
+  modal(t('fnTitle'), `<p style="margin-top:0">${esc(t('fnOps'))}</p><input id="fnQ" class="fnsearch" placeholder="${t('search')}"><ul class="fnlist" id="fnL">${list()}</ul>`, [{label:t('close')}]);
+  $('fnQ').addEventListener('input', () => { $('fnL').innerHTML = list(); });
+  $('fnL').addEventListener('click', e => {
+    const li = e.target.closest('li'); if (!li) return;
+    const f = FHELP[+li.dataset.i];
+    if (e.target.closest('.fndet')) return;
+    if (e.target.closest('.fnmore') || !f.n || !e.target.closest('.fnins')){
+      const det = li.querySelector('.fndet'), b = li.querySelector('.fnmore'); det.hidden = !det.hidden;
+      b.textContent = (det.hidden ? more + ' ▾' : less + ' ▴'); li.classList.toggle('open', !det.hidden); return;
+    }
+    closeModal();
+    if (!canEdit()) return;
+    if (!ed) startEdit('enter', '=');
+    const inp = ed.input; inp.focus(); const pos = caretOf(inp), v = inp.value, s = f.n + '(';
+    inp.value = v.slice(0, pos) + s + v.slice(pos); syncFrom(inp); try { inp.setSelectionRange(pos + s.length, pos + s.length); } catch (x){} afterInput();
+  });
+}
+
+
+/* ==================== ANTI-CHEAT ==================== */
+let grace = 0;
+const fsSupported = () => { const el = document.documentElement; return !!(el.requestFullscreen || el.webkitRequestFullscreen) && document.fullscreenEnabled !== false; };
+const inFS = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+function enterFS(){
+  grace = Date.now() + 1500; if (!CONFIG.ANTI_CHEAT) return;
+  const el = document.documentElement, fn = el.requestFullscreen || el.webkitRequestFullscreen;
+  if (fn){ try { const p = fn.call(el); if (p && p.catch) p.catch(() => {}); } catch (e){} }
+}
+function exitFS(){ try { if (inFS()){ const fn = document.exitFullscreen || document.webkitExitFullscreen; if (fn) fn.call(document); } } catch (e){} }
+function violation(type){
+  if (!CONFIG.ANTI_CHEAT || !S.started || S.finished || S.locked) return;
+  if (Date.now() < grace) return;
+  if (!$('modal').hidden && $('pinIn')) return;
+  S.violations.push({type, t:Date.now(), task:S.cur}); S.locked = true; S.lockReason = type;
+  cancelEdit(); drag = null; save(); showLock(); updViol();
+}
+const onFSChange = () => { if (!inFS() && fsSupported()) violation('fs'); };
+document.addEventListener('fullscreenchange', onFSChange);
+document.addEventListener('webkitfullscreenchange', onFSChange);
+window.addEventListener('blur', () => violation('blur'));
+document.addEventListener('visibilitychange', () => { if (document.hidden) violation('hidden'); });
+document.addEventListener('contextmenu', e => { if (S.started && !S.finished) e.preventDefault(); });
+function showLock(){
+  $('lkTitle').textContent = t('lockTitle');
+  $('lkReason').textContent = t('r_' + (S.lockReason === 'fs' ? 'fs' : S.lockReason || 'blur'));
+  $('lkCount').textContent = t('lockCount') + S.violations.length;
+  const needPin = S.violations.length > S.freeUntil;
+  $('lkPinWrap').hidden = !needPin; $('lkPinMsg').textContent = t('lockPin'); $('lkPinErr').textContent = ''; $('lkPin').value = '';
+  $('lkBtn').textContent = needPin ? t('unlock') : t('lockCont');
+  $('lock').hidden = false;
+}
+$('lkBtn').onclick = () => {
+  if (S.violations.length > S.freeUntil){
+    if ($('lkPin').value !== CONFIG.TEACHER_PIN){ $('lkPinErr').textContent = t('pinWrong'); return; }
+    S.freeUntil = S.violations.length + CONFIG.MAX_FREE_RESUMES;
+  }
+  S.locked = false; S.lockReason = null; save(); $('lock').hidden = true; enterFS();
+  setTimeout(() => { drawSel(); focusSink(); }, 300);
+};
+$('lkPin').addEventListener('keydown', e => { if (e.key === 'Enter') $('lkBtn').click(); });
+function updViol(){ const n = S.violations.length; $('viol').hidden = !n; $('viol').textContent = '⚠ ' + n; $('viol').title = t('violShort'); }
+
+/* ==================== SCREENS ==================== */
+function fmtDur(ms){ const s = Math.max(0, Math.floor(ms/1000)), h = Math.floor(s/3600), m = Math.floor(s % 3600/60), x = s % 60; return (h ? h + ':' + String(m).padStart(2, '0') : m) + ':' + String(x).padStart(2, '0'); }
+function applyI18n(){
+  document.documentElement.lang = S.lang === 'kz' ? 'kk' : 'ru';
+  document.querySelectorAll('[data-i]').forEach(el => { el.textContent = t(el.dataset.i); });
+  document.querySelectorAll('#tools button').forEach(b => { const s = b.querySelector('span'); if (s) b.title = s.textContent; });
+  document.querySelectorAll('[data-lang]').forEach(b => b.classList.toggle('on', b.dataset.lang === S.lang));
+  $('rules').innerHTML = t('rules').map(r => `<li>${r}</li>`).join('');
+  $('fsWarn').textContent = (CONFIG.ANTI_CHEAT && !fsSupported()) ? t('fsWarn') : '';
+  $('btnFuncs').hidden = !CONFIG.SHOW_FUNCTION_HELP;
+}
+function setLang(l){
+  S.lang = l; save(); applyI18n();
+  if (!$('work').hidden){ if (ed) cancelEdit(); refresh(); renderPanel(); renderTabs(); updViol(); if (S.locked) showLock(); }
+  if (!$('result').hidden) showResults();
+}
+document.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+function showWork(){
+  $('start').hidden = true; $('result').hidden = true; $('work').hidden = false;
+  $('who').textContent = S.student ? S.student.name + ' · ' + S.student.cls : '';
+  sel = SELS[S.cur]; buildGrid(); refresh(); renderPanel(); renderTabs(); updViol(); tick(); focusSink();
+}
+$('btnStart').onclick = () => {
+  const name = $('stName').value.trim().replace(/\s+/g, ' '), cls = $('stClass').value.trim();
+  if (name.length < 3 || !cls){ $('startErr').textContent = t('errName'); return; }
+  S.student = {name, cls}; S.started = true; S.startTime = Date.now(); S.finished = false; S.locked = false; save();
+  enterFS(); showWork();
+};
+$('btnPanel').onclick = () => { $('panel').classList.toggle('closed'); setTimeout(drawSel, 0); };
+$('btnFinish').onclick = () => {
+  if (ed && !commitEdit()) return;
+  modal(t('finishQ'), `<p>${t('finishText')}</p>`, [{label:t('cancel')}, {label:t('yes'), cls:'primary', onClick:() => { setTimeout(finish, 0); }}]);
+};
+function finish(){
+  if (S.finished) return; cancelEdit();
+  TASKS.forEach((_, i) => { S.sheets[i].result = runChecks(i); });
+  S.finished = true; S.locked = false; S.endTime = Date.now(); save();
+  $('lock').hidden = true; exitFS(); showResults();
+}
+function totals(){ let p = 0; const tot = TASKS.length*TASK_MAX; S.sheets.forEach(s => { if (s.result) p += s.result.pts; }); p = Math.round(p*100)/100; const pct = Math.round(p/tot*100); return {p, tot, pct, grade: pct >= 85 ? 5 : pct >= 65 ? 4 : pct >= 40 ? 3 : 2}; }
+function showResults(){
+  $('start').hidden = true; $('work').hidden = true; $('result').hidden = false;
+  const T = totals(), d = new Date(S.endTime || Date.now());
+  const rows = TASKS.map((tk, i) => { const r = S.sheets[i].result || {pts:0, total:TASK_MAX}; const pc = Math.round(r.pts/r.total*100);
+    return `<tr><td>${i + 1}</td><td>${esc(tr(tk.title))}</td><td class="n">${fmtPts(r.pts)} / ${r.total}</td><td style="width:30%"><div class="bar"><i style="width:${pc}%"></i></div></td><td class="n">${pc}%</td></tr>`; }).join('');
+  const vl = S.violations.length ? `<div class="viol"><b>${t('resViol')}: ${S.violations.length}</b><br>` + S.violations.map(v => `${new Date(v.t).toLocaleTimeString()} — ${t('vt_' + v.type)} (${t('task')} ${v.task + 1})`).join('<br>') + '</div>' : `<div class="viol none">✓ ${t('resNone')}</div>`;
+  $('result').innerHTML = `<div class="card rescard">
+    <div class="start-top"><div class="langs"><button data-lang="ru">RU</button><button data-lang="kz">ҚАЗ</button></div></div>
+    <div class="res-head"><span class="xl">X</span><div><h1>${t('resTitle')}</h1><p>${esc(S.student ? S.student.name : '')} · ${esc(S.student ? S.student.cls : '')}</p></div><div class="grade g${T.grade}" title="${t('resGrade')}">${T.grade}</div></div>
+    <div class="res-meta"><span>${t('resDate')}: <b>${d.toLocaleDateString()} ${d.toLocaleTimeString().slice(0, 5)}</b></span><span>${t('resTime')}: <b>${fmtDur((S.endTime || Date.now()) - S.startTime)}</b></span><span>${t('resTotal')}: <b>${fmtPts(T.p)} / ${T.tot} (${T.pct}%)</b></span></div>
+    <table class="restab"><tr><th>#</th><th>${t('resTask')}</th><th class="n">${t('resScore')}</th><th></th><th class="n">%</th></tr>${rows}
+    <tr class="tot"><td></td><td>${t('resTotal')}</td><td class="n">${fmtPts(T.p)} / ${T.tot}</td><td></td><td class="n">${T.pct}%</td></tr></table>
+    ${vl}
+    <div class="res-btns"><button class="btn primary" id="btnDl">${t('download')}</button><button class="btn" id="btnNew">${t('newStudent')}</button></div></div>`;
+  $('result').querySelectorAll('[data-lang]').forEach(b => { b.classList.toggle('on', b.dataset.lang === S.lang); b.onclick = () => setLang(b.dataset.lang); });
+  $('btnDl').onclick = downloadReport;
+  $('btnNew').onclick = () => askPin(resetAll);
+}
+function downloadReport(){
+  const T = totals(), d = new Date(S.endTime || Date.now());
+  const lines = [t('appTitle') + ' — ' + t('resTitle'), '', t('lblName') + ': ' + (S.student ? S.student.name : ''), t('lblClass') + ': ' + (S.student ? S.student.cls : ''),
+    t('resDate') + ': ' + d.toLocaleString(), t('resTime') + ': ' + fmtDur((S.endTime || Date.now()) - S.startTime), ''];
+  TASKS.forEach((tk, i) => { const r = S.sheets[i].result || {pts:0, total:TASK_MAX, items:[]}; lines.push(`${t('task')} ${i + 1}. ${tr(tk.title)}: ${fmtPts(r.pts)}/${r.total}`);
+    (r.items || []).forEach((it, j) => { const vw = itemView(it); lines.push(`   [${fmtPts(it.pts || 0)}/${fmtPts(tk.checks[j].p)}] ${tk.checks[j].cells} ${tr(tk.checks[j].name)}: ${vw.msg}`); }); });
+  lines.push('', `${t('resTotal')}: ${fmtPts(T.p)}/${T.tot} (${T.pct}%) · ${t('resGrade')}: ${T.grade}`, `${t('resViol')}: ${S.violations.length}`);
+  S.violations.forEach(v => lines.push(`   ${new Date(v.t).toLocaleTimeString()} — ${t('vt_' + v.type)} (${t('task')} ${v.task + 1})`));
+  const blob = new Blob(['﻿' + lines.join('\r\n')], {type:'text/plain;charset=utf-8'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'Excel_' + (S.student ? S.student.name.replace(/[^\wА-Яа-яЁёӘәҒғҚқҢңӨөҰұҮүҺһІі]+/g, '_') : 'result') + '.txt';
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+function resetAll(){
+  const lang = S.lang; S0 = {lang}; S = fresh(); save();
+  TASKS.forEach((_, i) => { UNDO[i] = []; REDO[i] = []; });
+  $('stName').value = ''; $('stClass').value = '';
+  $('result').hidden = true; $('work').hidden = true; $('lock').hidden = true; $('start').hidden = false; applyI18n(); toast(t('resetDone'), 'ok');
+}
+$('btnTeacher').onclick = () => askPin(() => {
+  const fnName = x => RU_NAME[x] || x;
+  const rubric = tk => '<table class="rub">' + tk.checks.map(ch => `<tr><td><code>${ch.cells}</code></td><td>${esc(tr(ch.name))}</td><td class="n"><b>${fmtPts(ch.p)}</b></td><td>${
+    ch.kind === 'same' ? t('rubricOne') : [ch.want ? ch.want.map(g => g.map(fnName).join(' / ')).join(' + ') : '', ch.uniform !== false && addrs(ch.cells).length >= 3 ? t('rubricFill') : ''].filter(Boolean).join('; ') || '—'}</td></tr>`).join('') + '</table>';
+  const body = `<p class="tiny" style="margin-top:0">${t('rubricNote')}</p>` + TASKS.map((tk, i) => `<b>${t('task')} ${i + 1}. ${esc(tr(tk.title))} — 10</b>${rubric(tk)}<div class="sol">${tk.sol.map(([r, f]) => r + ':  ' + esc(f)).join('\n')}</div>`).join('');
+  modal(t('solTitle'), body, [{label:t('resetAll'), onClick:() => { resetAll(); }}, {label:t('close'), cls:'primary'}]);
+});
+
+/* timer */
+function tick(){
+  if (!S.started || S.finished || $('work').hidden) return;
+  const el = Date.now() - S.startTime;
+  if (CONFIG.TIME_LIMIT_MIN > 0){ const left = CONFIG.TIME_LIMIT_MIN*60000 - el; $('timer').textContent = t('timeLeft') + ' ' + fmtDur(left); if (left <= 0){ finish(); toast(t('timeUp')); } }
+  else $('timer').textContent = '⏱ ' + fmtDur(el);
+}
+setInterval(tick, 1000);
+window.addEventListener('resize', () => { if (!$('work').hidden && TD.length){ drawSel(); updRefBoxes(); } });
+$('gridWrap').addEventListener('dragstart', e => e.preventDefault());
+
+/* ==================== INIT ==================== */
+applyI18n();
+if (!S.started) { $('start').hidden = false; }
+else if (S.finished) showResults();
+else {
+  showWork();
+  if (CONFIG.ANTI_CHEAT){
+    if (!S.locked){ S.violations.push({type:'reload', t:Date.now(), task:S.cur}); S.locked = true; S.lockReason = 'reload'; save(); }
+    updViol(); showLock();
+  }
+}
+
+if (/[?&]debug\b/.test(location.search)) window.__xp = {get S(){ return S; }, TASKS, runChecks, shiftFormula, normalizeFormula, makeCtx, refresh, goSheet, setCells, evalFormula, P, A, addrs,
+  applySol(i){ const tk = TASKS[i], s = S.sheets[i]; tk.sol.forEach(([rs, f]) => { const list = addrs(rs), p0 = P(list[0]); list.forEach(a => { const p = P(a); s.cells[a] = shiftFormula(normalizeFormula(f), p.r - p0.r, p.c - p0.c); }); }); }};
+})();
+</script>
+</body>
+</html>
