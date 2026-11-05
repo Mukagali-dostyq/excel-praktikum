@@ -1175,8 +1175,27 @@ function fresh(){ return {v:1, lang:(S0 && S0.lang) || 'ru', student:null, start
   sheets:TASKS.map(() => ({cells:{}, result:null, bad:[], checks:0})), violations:[], freeUntil:CONFIG.MAX_FREE_RESUMES, locked:false, lockReason:null}; }
 let S0 = null;
 function load(){ try { const s = JSON.parse(localStorage.getItem(LS_KEY)); if (s && s.v === 1 && s.sheets && s.sheets.length === TASKS.length) return s; } catch (e){} return null; }
-function save(){ try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch (e){} }
+function save(){ try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch (e){} liveKick(); }
 let S = load() || fresh();
+/* ---- онлайн-монитор учителя: баллы по задачам, нарушения и формулы → портал ---- */
+const LIVE_URL = 'https://ent-platform-omega.vercel.app/api/excel-live/save', LIVE_ROUND = 'excel-live-11';
+let liveT = 0, liveAt = 0;
+function liveUid(){ try { if (crypto.randomUUID) return crypto.randomUUID(); } catch (e){} return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { const r = Math.random()*16|0; return (c === 'x' ? r : (r & 3 | 8)).toString(16); }); }
+function liveKick(){ if (!S || !S.started || !S.student) return; if (!liveT) liveT = setTimeout(liveSend, 4000); }
+function liveSend(){
+  liveT = 0; if (!S.started || !S.student || !S.student.name) return;
+  if (!S.liveId){ S.liveId = liveUid(); try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch (e){} }
+  try {
+    const tasks = TASKS.map((tk, i) => { let pts = 0; try { pts = runChecks(i).pts; } catch (e){} const c = S.sheets[i].cells || {}; return {pts, filled: Object.keys(c).filter(k => c[k] !== '' && c[k] != null).length}; });
+    const body = JSON.stringify({id: S.liveId, round: LIVE_ROUND, student: S.student.name, cls: S.student.cls, lang: S.lang, cur: S.cur,
+      finished: !!S.finished, locked: !!S.locked, seconds: Math.round(((S.endTime || Date.now()) - (S.startTime || Date.now()))/1000),
+      tasks, viol: S.violations || [], cells: S.sheets.map(s => s.cells || {})});
+    liveAt = Date.now();
+    fetch(LIVE_URL, {method:'POST', mode:'no-cors', headers:{'content-type':'text/plain'}, body, keepalive: body.length < 60000}).catch(() => {});
+  } catch (e){}
+}
+setInterval(() => { if (S.started && !S.finished && Date.now() - liveAt > 20000) liveSend(); }, 5000);
+document.addEventListener('visibilitychange', () => { if (document.hidden && S.started){ clearTimeout(liveT); liveSend(); } });
 
 function t(k){ const d = UI[S.lang] || UI.ru; return d[k] !== undefined ? d[k] : (UI.ru[k] !== undefined ? UI.ru[k] : k); }
 function tr(x){ if (x && typeof x === 'object' && 'ru' in x) return x[S.lang] !== undefined ? x[S.lang] : x.ru; return x; }
